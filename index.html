@@ -313,11 +313,15 @@
       background: rgba(10, 6, 12, 0.95); backdrop-filter: blur(25px);
       z-index: 100; display: flex; align-items: center; justify-content: center;
     }
-    .lock-box {
+    .auth-box {
       background: var(--bg-card); border: 1px solid var(--bg-card-border);
-      padding: 40px; border-radius: 24px; text-align: center;
+      padding: 35px; border-radius: 24px; text-align: center;
       max-width: 380px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.7);
     }
+    .auth-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--bg-card-border); padding-bottom: 10px; }
+    .auth-tab-btn { background: none; border: none; color: var(--text-muted); font-size: 1rem; cursor: pointer; font-family: 'Cinzel', serif; flex: 1; padding: 6px; }
+    .auth-tab-btn.active { color: var(--primary-rose); border-bottom: 2px solid var(--primary-rose); font-weight: 600; }
+
     .toast {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
       background: var(--primary-rose); color: #fff; padding: 12px 25px; border-radius: 30px;
@@ -332,24 +336,29 @@
   <!-- Floating Petals Container -->
   <div id="petalsContainer"></div>
 
-  <!-- Auth Modal (Username & PIN Login / Register) -->
+  <!-- Auth Modal (Login & Register Sections) -->
   <div class="modal-overlay" id="authModal">
-    <div class="lock-box">
-      <h2 style="font-family:'Cinzel', serif; color: var(--primary-rose); margin-bottom: 5px;">Sanctuary Access</h2>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Enter your username to login or register</p>
+    <div class="auth-box">
+      <h2 style="font-family:'Cinzel', serif; color: var(--primary-rose); margin-bottom: 5px;">Sanctuary Gateway</h2>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Your private heart's vault</p>
       
-      <div id="authStep1">
-        <input type="text" id="usernameInput" placeholder="Enter Username (e.g. John)" style="margin-bottom: 15px; text-align: center;">
-        <button class="btn btn-pink" style="width: 100%; justify-content: center;" onclick="proceedAuth()">Continue →</button>
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="loginTabBtn" onclick="switchAuthMode('login')">Login</button>
+        <button class="auth-tab-btn" id="registerTabBtn" onclick="switchAuthMode('register')">Register</button>
       </div>
 
-      <div id="authStep2" style="display: none;">
-        <p id="authPromptText" style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 10px;"></p>
-        <input type="password" id="pinInput" maxlength="4" placeholder="Enter 4-Digit PIN" style="margin-bottom: 15px; text-align: center; letter-spacing: 6px; font-size: 1.2rem;">
-        <div style="display: flex; gap: 10px;">
-          <button class="btn" style="flex: 1; justify-content: center;" onclick="backToUsername()">Back</button>
-          <button class="btn btn-pink" style="flex: 1; justify-content: center;" onclick="submitAuthPin()">Login / Register</button>
-        </div>
+      <!-- Login Section -->
+      <div id="loginSection">
+        <input type="text" id="loginUsername" placeholder="Username" style="margin-bottom: 12px;">
+        <input type="password" id="loginPin" maxlength="4" placeholder="4-Digit PIN" style="margin-bottom: 20px; letter-spacing: 4px;">
+        <button class="btn btn-pink" style="width: 100%; justify-content: center;" onclick="handleLogin()">Login to Vault 🗝️</button>
+      </div>
+
+      <!-- Register Section -->
+      <div id="registerSection" style="display: none;">
+        <input type="text" id="registerUsername" placeholder="Choose a Username" style="margin-bottom: 12px;">
+        <input type="password" id="registerPin" maxlength="4" placeholder="Create 4-Digit PIN" style="margin-bottom: 20px; letter-spacing: 4px;">
+        <button class="btn btn-pink" style="width: 100%; justify-content: center;" onclick="handleRegister()">Create Account ✨</button>
       </div>
     </div>
   </div>
@@ -362,8 +371,7 @@
       </div>
       <div class="header-actions">
         <div class="user-pill" id="userPill">👤 Vault</div>
-        <button class="btn" onclick="switchUser()">👤 Switch User</button>
-        <button class="btn" onclick="lockSanctuary()">🔒 Lock</button>
+        <button class="btn" onclick="logoutUser()">🔓 Logout</button>
       </div>
     </header>
 
@@ -517,7 +525,6 @@
   <script>
     let activeUsername = localStorage.getItem('active_username') || "";
     let activeVibe = "🥰 Loved";
-    let tempUsername = "";
 
     function createPetals() {
       const container = document.getElementById('petalsContainer');
@@ -534,7 +541,6 @@
     }
     createPetals();
 
-    // Check login state on load
     window.addEventListener('DOMContentLoaded', () => {
       if(!activeUsername) {
         document.getElementById('authModal').style.display = 'flex';
@@ -543,64 +549,76 @@
       }
     });
 
-    function proceedAuth() {
-      const uname = document.getElementById('usernameInput').value.trim();
-      if(!uname) return showToast('Please enter a username!');
-
-      tempUsername = uname;
-      const registeredPins = JSON.parse(localStorage.getItem('sanctuary_users_pins') || '{}');
-
-      document.getElementById('authStep1').style.display = 'none';
-      document.getElementById('authStep2').style.display = 'block';
-
-      if(registeredPins[tempUsername]) {
-        document.getElementById('authPromptText').innerText = `Welcome back, ${tempUsername}! Enter your 4-digit PIN:`;
+    function switchAuthMode(mode) {
+      if(mode === 'login') {
+        document.getElementById('loginSection').style.display = 'block';
+        document.getElementById('registerSection').style.display = 'none';
+        document.getElementById('loginTabBtn').classList.add('active');
+        document.getElementById('registerTabBtn').classList.remove('active');
       } else {
-        document.getElementById('authPromptText').innerText = `New account for "${tempUsername}"! Set your 4-digit PIN:`;
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('registerSection').style.display = 'block';
+        document.getElementById('registerTabBtn').classList.add('active');
+        document.getElementById('loginTabBtn').classList.remove('active');
       }
-      document.getElementById('pinInput').value = '';
-      document.getElementById('pinInput').focus();
     }
 
-    function backToUsername() {
-      document.getElementById('authStep2').style.display = 'none';
-      document.getElementById('authStep1').style.display = 'block';
-    }
+    function handleRegister() {
+      const uname = document.getElementById('registerUsername').value.trim();
+      const pin = document.getElementById('registerPin').value.trim();
 
-    function submitAuthPin() {
-      const pin = document.getElementById('pinInput').value.trim();
-      if(pin.length !== 4 || isNaN(pin)) return showToast('PIN must be 4 digits!');
+      if(!uname || !pin) return showToast('Please enter both username and PIN!');
+      if(pin.length !== 4 || isNaN(pin)) return showToast('PIN must be exactly 4 digits!');
 
-      let registeredPins = JSON.parse(localStorage.getItem('sanctuary_users_pins') || '{}');
+      let registeredUsers = JSON.parse(localStorage.getItem('sanctuary_users') || '{}');
 
-      if(registeredPins[tempUsername]) {
-        // Login existing user
-        if(registeredPins[tempUsername] !== pin) {
-          return showToast('Incorrect PIN for this username!');
-        }
-      } else {
-        // Register new user
-        registeredPins[tempUsername] = pin;
-        localStorage.setItem('sanctuary_users_pins', JSON.stringify(registeredPins));
+      if(registeredUsers[uname]) {
+        return showToast('Username already exists! Please use Login instead.');
       }
 
-      activeUsername = tempUsername;
+      registeredUsers[uname] = pin;
+      localStorage.setItem('sanctuary_users', JSON.stringify(registeredUsers));
+
+      activeUsername = uname;
       localStorage.setItem('active_username', activeUsername);
-      
+
       document.getElementById('authModal').style.display = 'none';
       initUserSession(activeUsername);
-      showToast(`Welcome to ${activeUsername}'s Sanctuary ❤️`);
+      showToast(`Account created successfully! Welcome, ${activeUsername} ❤️`);
     }
 
-    function switchUser() {
-      document.getElementById('authStep2').style.display = 'none';
-      document.getElementById('authStep1').style.display = 'block';
-      document.getElementById('usernameInput').value = '';
+    function handleLogin() {
+      const uname = document.getElementById('loginUsername').value.trim();
+      const pin = document.getElementById('loginPin').value.trim();
+
+      if(!uname || !pin) return showToast('Please enter both username and PIN!');
+
+      let registeredUsers = JSON.parse(localStorage.getItem('sanctuary_users') || '{}');
+
+      if(!registeredUsers[uname]) {
+        return showToast('Username not found! Please register first.');
+      }
+
+      if(registeredUsers[uname] !== pin) {
+        return showToast('Incorrect PIN code!');
+      }
+
+      activeUsername = uname;
+      localStorage.setItem('active_username', activeUsername);
+
+      document.getElementById('authModal').style.display = 'none';
+      initUserSession(activeUsername);
+      showToast(`Welcome back, ${activeUsername} ❤️`);
+    }
+
+    function logoutUser() {
+      activeUsername = "";
+      localStorage.removeItem('active_username');
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPin').value = '';
+      document.getElementById('registerUsername').value = '';
+      document.getElementById('registerPin').value = '';
       document.getElementById('authModal').style.display = 'flex';
-    }
-
-    function lockSanctuary() {
-      switchUser();
     }
 
     function initUserSession(username) {
