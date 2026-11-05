@@ -74,7 +74,17 @@
     }
     .brand p { font-size: 0.85rem; color: var(--text-muted); font-style: italic; font-family: 'Playfair Display', serif; }
 
-    .header-actions { display: flex; gap: 10px; }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+
+    .user-pill {
+      background: rgba(232, 131, 153, 0.15);
+      border: 1px solid var(--bg-card-border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--primary-rose);
+      font-weight: 600;
+    }
 
     .btn {
       background: rgba(255, 255, 255, 0.05);
@@ -306,20 +316,8 @@
     .lock-box {
       background: var(--bg-card); border: 1px solid var(--bg-card-border);
       padding: 40px; border-radius: 24px; text-align: center;
-      max-width: 360px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      max-width: 380px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.7);
     }
-    .pin-display {
-      letter-spacing: 16px; font-size: 2.2rem; margin: 25px 0;
-      color: var(--primary-rose); height: 45px;
-    }
-    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .key-btn {
-      background: rgba(255,255,255,0.06); border: 1px solid var(--bg-card-border);
-      color: var(--text-main); padding: 18px; border-radius: 50%;
-      font-size: 1.25rem; cursor: pointer; transition: all 0.2s;
-    }
-    .key-btn:hover { background: var(--primary-rose); border-color: var(--primary-rose); transform: scale(1.05); }
-
     .toast {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
       background: var(--primary-rose); color: #fff; padding: 12px 25px; border-radius: 30px;
@@ -334,38 +332,24 @@
   <!-- Floating Petals Container -->
   <div id="petalsContainer"></div>
 
-  <!-- PIN Lock Screen Modal (No default text exposed) -->
-  <div class="modal-overlay" id="lockModal">
+  <!-- Auth Modal (Username & PIN Login / Register) -->
+  <div class="modal-overlay" id="authModal">
     <div class="lock-box">
-      <h2 style="font-family:'Cinzel', serif; color: var(--primary-rose);">Sanctuary Lock</h2>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:5px;">Enter PIN Code</p>
-      <div class="pin-display" id="pinDisplay">••••</div>
-      <div class="keypad">
-        <button class="key-btn" onclick="pressKey('1')">1</button>
-        <button class="key-btn" onclick="pressKey('2')">2</button>
-        <button class="key-btn" onclick="pressKey('3')">3</button>
-        <button class="key-btn" onclick="pressKey('4')">4</button>
-        <button class="key-btn" onclick="pressKey('5')">5</button>
-        <button class="key-btn" onclick="pressKey('6')">6</button>
-        <button class="key-btn" onclick="pressKey('7')">7</button>
-        <button class="key-btn" onclick="pressKey('8')">8</button>
-        <button class="key-btn" onclick="pressKey('9')">9</button>
-        <button class="key-btn" onclick="clearPin()">C</button>
-        <button class="key-btn" onclick="pressKey('0')">0</button>
-        <button class="key-btn" onclick="checkPin()">✓</button>
+      <h2 style="font-family:'Cinzel', serif; color: var(--primary-rose); margin-bottom: 5px;">Sanctuary Access</h2>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Enter your username to login or register</p>
+      
+      <div id="authStep1">
+        <input type="text" id="usernameInput" placeholder="Enter Username (e.g. John)" style="margin-bottom: 15px; text-align: center;">
+        <button class="btn btn-pink" style="width: 100%; justify-content: center;" onclick="proceedAuth()">Continue →</button>
       </div>
-    </div>
-  </div>
 
-  <!-- Change PIN Modal -->
-  <div class="modal-overlay" id="changePinModal" style="display: none;">
-    <div class="lock-box" style="max-width: 380px;">
-      <h2 style="font-family:'Cinzel', serif; color: var(--primary-rose); margin-bottom:10px;">Change Security PIN</h2>
-      <input type="password" id="oldPinInput" maxlength="4" placeholder="Enter Old 4-Digit PIN">
-      <input type="password" id="newPinInput" maxlength="4" placeholder="Enter New 4-Digit PIN">
-      <div style="display:flex; gap:10px; margin-top:10px;">
-        <button class="btn" style="flex:1;" onclick="closeChangePinModal()">Cancel</button>
-        <button class="btn btn-pink" style="flex:1;" onclick="saveNewPinCode()">Update PIN</button>
+      <div id="authStep2" style="display: none;">
+        <p id="authPromptText" style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 10px;"></p>
+        <input type="password" id="pinInput" maxlength="4" placeholder="Enter 4-Digit PIN" style="margin-bottom: 15px; text-align: center; letter-spacing: 6px; font-size: 1.2rem;">
+        <div style="display: flex; gap: 10px;">
+          <button class="btn" style="flex: 1; justify-content: center;" onclick="backToUsername()">Back</button>
+          <button class="btn btn-pink" style="flex: 1; justify-content: center;" onclick="submitAuthPin()">Login / Register</button>
+        </div>
       </div>
     </div>
   </div>
@@ -373,12 +357,13 @@
   <div class="container">
     <header>
       <div class="brand">
-        <h1>Dearest Thoughts</h1>
-        <p>A private sanctuary for your heart</p>
+        <h1 id="brandTitle">Dearest Thoughts</h1>
+        <p id="brandSubtitle">A private sanctuary for your heart</p>
       </div>
       <div class="header-actions">
-        <button class="btn" onclick="openChangePinModal()">🔑 Change PIN</button>
-        <button class="btn" onclick="lockSanctuary()">🔒 Lock Sanctuary</button>
+        <div class="user-pill" id="userPill">👤 Vault</div>
+        <button class="btn" onclick="switchUser()">👤 Switch User</button>
+        <button class="btn" onclick="lockSanctuary()">🔒 Lock</button>
       </div>
     </header>
 
@@ -465,7 +450,7 @@
 
       </div>
 
-      <!-- Journal ArchivesFeed -->
+      <!-- Journal Archives -->
       <div class="journal-feed">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
           <h3 style="font-family:'Playfair Display', serif; font-size:1.4rem; color:#fff;">📖 Journal Archives</h3>
@@ -530,21 +515,9 @@
   <div class="toast" id="toast">Notification</div>
 
   <script>
-    // Security PIN (Default 3102, read dynamic from localStorage)
-    let currentPin = localStorage.getItem('sanctuary_pin') || "3102";
-    let enteredPin = "";
+    let activeUsername = localStorage.getItem('active_username') || "";
     let activeVibe = "🥰 Loved";
-
-    let thoughts = JSON.parse(localStorage.getItem('dearest_thoughts') || '[]');
-    let savedLetters = JSON.parse(localStorage.getItem('dearest_saved_letters') || '[]');
-
-    const affirmations = [
-      { quote: '"In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."', author: '— Maya Angelou' },
-      { quote: '"Whatever our souls are made of, his and mine are the same."', author: '— Emily Brontë' },
-      { quote: '"If I had a flower for every time I thought of you... I could walk through my garden forever."', author: '— Alfred Tennyson' },
-      { quote: '"I love you not only for what you are, but for what I am when I am with you."', author: '— Roy Croft' }
-    ];
-    let quoteIndex = 0;
+    let tempUsername = "";
 
     function createPetals() {
       const container = document.getElementById('petalsContainer');
@@ -561,49 +534,80 @@
     }
     createPetals();
 
-    function pressKey(num) {
-      if(enteredPin.length < 4) {
-        enteredPin += num;
-        updatePinDisplay();
-      }
-    }
-    function clearPin() { enteredPin = ""; updatePinDisplay(); }
-    function updatePinDisplay() {
-      document.getElementById('pinDisplay').innerText = '•'.repeat(enteredPin.length) || '••••';
-    }
-    function checkPin() {
-      if(enteredPin === currentPin) {
-        document.getElementById('lockModal').style.display = 'none';
-        enteredPin = "";
-        updatePinDisplay();
-        showToast("Welcome back to your Sanctuary ❤️");
+    // Check login state on load
+    window.addEventListener('DOMContentLoaded', () => {
+      if(!activeUsername) {
+        document.getElementById('authModal').style.display = 'flex';
       } else {
-        showToast("Incorrect PIN Code!");
-        clearPin();
+        initUserSession(activeUsername);
       }
+    });
+
+    function proceedAuth() {
+      const uname = document.getElementById('usernameInput').value.trim();
+      if(!uname) return showToast('Please enter a username!');
+
+      tempUsername = uname;
+      const registeredPins = JSON.parse(localStorage.getItem('sanctuary_users_pins') || '{}');
+
+      document.getElementById('authStep1').style.display = 'none';
+      document.getElementById('authStep2').style.display = 'block';
+
+      if(registeredPins[tempUsername]) {
+        document.getElementById('authPromptText').innerText = `Welcome back, ${tempUsername}! Enter your 4-digit PIN:`;
+      } else {
+        document.getElementById('authPromptText').innerText = `New account for "${tempUsername}"! Set your 4-digit PIN:`;
+      }
+      document.getElementById('pinInput').value = '';
+      document.getElementById('pinInput').focus();
     }
+
+    function backToUsername() {
+      document.getElementById('authStep2').style.display = 'none';
+      document.getElementById('authStep1').style.display = 'block';
+    }
+
+    function submitAuthPin() {
+      const pin = document.getElementById('pinInput').value.trim();
+      if(pin.length !== 4 || isNaN(pin)) return showToast('PIN must be 4 digits!');
+
+      let registeredPins = JSON.parse(localStorage.getItem('sanctuary_users_pins') || '{}');
+
+      if(registeredPins[tempUsername]) {
+        // Login existing user
+        if(registeredPins[tempUsername] !== pin) {
+          return showToast('Incorrect PIN for this username!');
+        }
+      } else {
+        // Register new user
+        registeredPins[tempUsername] = pin;
+        localStorage.setItem('sanctuary_users_pins', JSON.stringify(registeredPins));
+      }
+
+      activeUsername = tempUsername;
+      localStorage.setItem('active_username', activeUsername);
+      
+      document.getElementById('authModal').style.display = 'none';
+      initUserSession(activeUsername);
+      showToast(`Welcome to ${activeUsername}'s Sanctuary ❤️`);
+    }
+
+    function switchUser() {
+      document.getElementById('authStep2').style.display = 'none';
+      document.getElementById('authStep1').style.display = 'block';
+      document.getElementById('usernameInput').value = '';
+      document.getElementById('authModal').style.display = 'flex';
+    }
+
     function lockSanctuary() {
-      document.getElementById('lockModal').style.display = 'flex';
+      switchUser();
     }
 
-    // Change PIN Logic
-    function openChangePinModal() { document.getElementById('changePinModal').style.display = 'flex'; }
-    function closeChangePinModal() {
-      document.getElementById('oldPinInput').value = '';
-      document.getElementById('newPinInput').value = '';
-      document.getElementById('changePinModal').style.display = 'none';
-    }
-    function saveNewPinCode() {
-      const oldPin = document.getElementById('oldPinInput').value;
-      const newPin = document.getElementById('newPinInput').value;
-
-      if(oldPin !== currentPin) return showToast("Incorrect old PIN!");
-      if(newPin.length !== 4 || isNaN(newPin)) return showToast("New PIN must be 4 numbers!");
-
-      currentPin = newPin;
-      localStorage.setItem('sanctuary_pin', newPin);
-      showToast("PIN updated successfully! 🔒");
-      closeChangePinModal();
+    function initUserSession(username) {
+      document.getElementById('brandTitle').innerText = `${username}'s Sanctuary`;
+      document.getElementById('userPill').innerText = `👤 ${username}`;
+      renderThoughts();
+      renderSavedLetters();
     }
 
     function switchTab(tabId, btn) {
@@ -625,6 +629,10 @@
       body.value += ' 💕';
     }
 
+    function getStorageKey(type) {
+      return `dearest_${type}_user_${activeUsername}`;
+    }
+
     function saveThought() {
       const title = document.getElementById('thoughtTitle').value;
       const body = document.getElementById('thoughtBody').value;
@@ -640,8 +648,9 @@
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
       };
 
+      let thoughts = JSON.parse(localStorage.getItem(getStorageKey('thoughts')) || '[]');
       thoughts.unshift(entry);
-      localStorage.setItem('dearest_thoughts', JSON.stringify(thoughts));
+      localStorage.setItem(getStorageKey('thoughts'), JSON.stringify(thoughts));
 
       document.getElementById('thoughtTitle').value = '';
       document.getElementById('thoughtBody').value = '';
@@ -651,6 +660,7 @@
 
     function renderThoughts() {
       const grid = document.getElementById('journalGrid');
+      let thoughts = JSON.parse(localStorage.getItem(getStorageKey('thoughts')) || '[]');
       document.getElementById('entryCountBadge').innerText = `${thoughts.length} entries`;
 
       if(thoughts.length === 0) {
@@ -675,8 +685,9 @@
     }
 
     function deleteThought(id) {
+      let thoughts = JSON.parse(localStorage.getItem(getStorageKey('thoughts')) || '[]');
       thoughts = thoughts.filter(t => t.id !== id);
-      localStorage.setItem('dearest_thoughts', JSON.stringify(thoughts));
+      localStorage.setItem(getStorageKey('thoughts'), JSON.stringify(thoughts));
       renderThoughts();
       showToast('Thought removed');
     }
@@ -692,6 +703,14 @@
       }
     }
 
+    const affirmations = [
+      { quote: '"In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."', author: '— Maya Angelou' },
+      { quote: '"Whatever our souls are made of, his and mine are the same."', author: '— Emily Brontë' },
+      { quote: '"If I had a flower for every time I thought of you... I could walk through my garden forever."', author: '— Alfred Tennyson' },
+      { quote: '"I love you not only for what you are, but for what I am when I am with you."', author: '— Roy Croft' }
+    ];
+    let quoteIndex = 0;
+
     function nextQuote() {
       quoteIndex = (quoteIndex + 1) % affirmations.length;
       document.getElementById('quoteText').innerText = affirmations[quoteIndex].quote;
@@ -699,6 +718,7 @@
     }
 
     function compileSelectedThoughts() {
+      let thoughts = JSON.parse(localStorage.getItem(getStorageKey('thoughts')) || '[]');
       const selectedCheckboxes = document.querySelectorAll('.entry-checkbox:checked');
       let targetEntries = [];
 
@@ -727,8 +747,9 @@
       }
 
       const letterObj = { id: Date.now(), to, from, body, date };
+      let savedLetters = JSON.parse(localStorage.getItem(getStorageKey('letters')) || '[]');
       savedLetters.unshift(letterObj);
-      localStorage.setItem('dearest_saved_letters', JSON.stringify(savedLetters));
+      localStorage.setItem(getStorageKey('letters'), JSON.stringify(savedLetters));
       
       renderSavedLetters();
       showToast(`Love Letter saved with current date (${date}) 💌`);
@@ -736,6 +757,8 @@
 
     function renderSavedLetters() {
       const container = document.getElementById('savedLettersGrid');
+      let savedLetters = JSON.parse(localStorage.getItem(getStorageKey('letters')) || '[]');
+      
       if(savedLetters.length === 0) {
         container.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); text-align: center; font-size: 0.85rem;">No saved letters yet.</div>`;
         return;
@@ -769,13 +792,10 @@
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // Init
+    // Init dates
     const currentDateStr = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
     document.getElementById('currentDateDisplay').innerText = currentDateStr;
     document.getElementById('dispDate').innerText = currentDateStr;
-
-    renderThoughts();
-    renderSavedLetters();
   </script>
 </body>
 </html>
