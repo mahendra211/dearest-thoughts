@@ -1,687 +1,1081 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dearest Thoughts | Romantic Shared Sanctuary</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dearest Thoughts | Romantic Sanctuary</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Dancing+Script:wght@500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #120912;
+      --bg-card: rgba(30, 18, 30, 0.75);
+      --bg-card-border: rgba(232, 131, 153, 0.22);
+      --primary-rose: #e88399;
+      --primary-rose-glow: rgba(232, 131, 153, 0.45);
+      --deep-burgundy: #2c1220;
+      --gold-accent: #d4af37;
+      --gold-hover: #f3cf68;
+      --gold-glow: rgba(212, 175, 55, 0.35);
+      --text-main: #f8eef3;
+      --text-muted: #bda8b5;
+      --shadow-rose: rgba(232, 131, 153, 0.12);
+      --danger: #e74c3c;
+    }
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        roseAcc: '#ff4d6d',
-                        roseHover: '#ff758f',
-                        darkBg: '#0f0e13',
-                        cardBg: '#18161e',
-                        cardBorder: '#292534',
-                        glowColor: 'rgba(255, 77, 109, 0.15)'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'Georgia', 'serif']
-                    }
-                }
-            }
-        }
-    </script>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(232, 131, 153, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(44, 18, 32, 0.4) 0%, transparent 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    /* Swaying Petals Animation */
+    .petal {
+      position: fixed;
+      background: radial-gradient(circle at 30% 30%, #f4aab9 0%, #e88399 50%, #800e28 100%);
+      border-radius: 80% 0 80% 0;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 1;
+      animation: floatSway linear infinite;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      filter: drop-shadow(0 2px 4px rgba(232, 131, 153, 0.3));
+    }
 
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    @keyframes floatSway {
+      0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+      10% { opacity: 0.85; }
+      50% { transform: translateY(50vh) rotate(180deg) translateX(40px); }
+      90% { opacity: 0.7; }
+      100% { transform: translateY(105vh) rotate(360deg) translateX(-20px); opacity: 0; }
+    }
 
-    <!-- Firebase App & Firestore Modular SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    /* Ambient Side Floral Frames */
+    .floral-side {
+      position: fixed;
+      top: 0; bottom: 0;
+      width: 140px;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.3;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 30px 0;
+    }
+    .floral-left { left: 0; background: linear-gradient(90deg, rgba(232,131,153,0.15), transparent); }
+    .floral-right { right: 0; background: linear-gradient(-90deg, rgba(232,131,153,0.15), transparent); }
+    .floral-svg { width: 90px; fill: var(--primary-rose); margin: auto; filter: drop-shadow(0 0 10px var(--primary-rose-glow)); }
 
-        // Expose Firebase tools globally for our application script
-        window.FB = {
-            initializeApp,
-            getAuth,
-            signInAnonymously,
-            signInWithCustomToken,
-            onAuthStateChanged,
-            getFirestore,
-            collection,
-            addDoc,
-            updateDoc,
-            doc,
-            onSnapshot,
-            serverTimestamp
-        };
-    </script>
+    /* Main Container */
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 25px 20px;
+      position: relative;
+      z-index: 5;
+    }
 
-    <style>
-        body {
-            background-color: #0c0b10;
-            color: #e2e8f0;
-            font-family: 'Inter', sans-serif;
-            background-image: 
-                radial-gradient(circle at 15% 15%, rgba(255, 77, 109, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 75%, rgba(199, 125, 255, 0.05) 0%, transparent 40%);
-            background-attachment: fixed;
-        }
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--bg-card-border);
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
 
-        .glass-card {
-            background: rgba(24, 22, 30, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
+    .brand { display: flex; align-items: center; gap: 15px; }
+    .brand-icon {
+      width: 48px; height: 48px;
+      background: radial-gradient(circle, var(--deep-burgundy), var(--bg-dark));
+      border: 1px solid var(--gold-accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+    .brand h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 2.1rem;
+      background: linear-gradient(135deg, #fff 0%, var(--primary-rose) 60%, var(--gold-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1.5px;
+    }
+    .brand p { font-size: 0.88rem; color: var(--text-muted); font-style: italic; }
 
-        .glass-card:hover {
-            border-color: rgba(255, 77, 109, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(255, 77, 109, 0.1);
-        }
+    /* Buttons */
+    .btn {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      color: var(--text-main);
+      padding: 10px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+      backdrop-filter: blur(10px);
+    }
+    .btn:hover { 
+      background: var(--primary-rose); 
+      border-color: var(--primary-rose); 
+      color: #fff; 
+      box-shadow: 0 4px 20px var(--primary-rose-glow);
+      transform: translateY(-2px);
+    }
+    .btn:active { transform: translateY(0); }
+    
+    .btn-gold { 
+      border-color: var(--gold-accent); 
+      color: var(--gold-accent); 
+    }
+    .btn-gold:hover { 
+      background: linear-gradient(135deg, var(--gold-accent), #b89228); 
+      color: #120912; 
+      box-shadow: 0 4px 20px var(--gold-glow);
+    }
+    .btn-danger { border-color: rgba(231, 76, 60, 0.4); color: #f1948a; }
+    .btn-danger:hover { background: var(--danger); border-color: var(--danger); color: #fff; }
 
-        .rose-glow {
-            box-shadow: 0 0 25px rgba(255, 77, 109, 0.3);
-        }
+    /* Navigation Tabs */
+    .tabs {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      justify-content: center;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 8px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      padding: 12px 28px;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+      letter-spacing: 0.8px;
+    }
+    .tab-btn:hover { color: var(--text-main); }
+    .tab-btn.active {
+      color: var(--primary-rose);
+      border-bottom-color: var(--primary-rose);
+      text-shadow: 0 0 12px var(--primary-rose-glow);
+    }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0c0b10;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #292534;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ff4d6d;
-        }
-    </style>
+    /* View Sections */
+    .view-section { display: none; }
+    .view-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & Inputs */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.3);
+    }
+
+    label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; display: block; }
+    input, textarea, select {
+      width: 100%;
+      background: rgba(18, 9, 18, 0.7);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: var(--text-main);
+      margin-top: 4px;
+      margin-bottom: 18px;
+      outline: none;
+      font-size: 0.95rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input:focus, textarea:focus, select:focus { 
+      border-color: var(--primary-rose); 
+      box-shadow: 0 0 12px var(--primary-rose-glow);
+    }
+
+    /* Journal Grid & Cards */
+    .search-bar {
+      display: flex; gap: 12px; margin-bottom: 20px;
+    }
+    .search-bar input { margin-bottom: 0; }
+
+    .journal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 22px;
+    }
+    .journal-item {
+      background: linear-gradient(145deg, rgba(38, 20, 36, 0.8), rgba(24, 12, 24, 0.9));
+      border: 1px solid var(--bg-card-border);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .journal-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(232, 131, 153, 0.18);
+      border-color: var(--primary-rose);
+    }
+    .journal-item.selected-for-letter {
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+    .journal-item h4 { 
+      color: var(--primary-rose); 
+      margin-bottom: 8px; 
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+    }
+    .journal-item .meta { 
+      font-size: 0.78rem; 
+      color: var(--gold-accent); 
+      margin-bottom: 12px; 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mood-tag {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+    }
+    .journal-item .body-text {
+      font-size: 0.93rem;
+      color: #e2d2dc;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 18px;
+      flex-grow: 1;
+    }
+    .journal-item .card-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 12px;
+    }
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .btn-icon:hover { color: var(--primary-rose); }
+    .btn-icon-danger:hover { color: var(--danger); }
+
+    /* FLOWER-DECORATED LOVE LETTER PARCHMENT */
+    .letter-paper-wrapper {
+      position: relative;
+      margin-top: 15px;
+    }
+    
+    .letter-paper {
+      background: #fdfbf7;
+      background-image: 
+        radial-gradient(#eedec8 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(245, 235, 218, 0.5), rgba(255, 252, 245, 0.9));
+      background-size: 24px 24px, 100% 100%;
+      color: #2b1810;
+      border-radius: 12px;
+      padding: 70px 60px 80px 60px;
+      box-shadow: 
+        0 15px 45px rgba(0,0,0,0.6),
+        inset 0 0 80px rgba(190, 145, 90, 0.2),
+        0 0 0 1px #e3d3bd;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Embedded Botanical SVG Flowers on Love Letter */
+    .corner-flower {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.85;
+    }
+    .corner-tl { top: -10px; left: -10px; }
+    .corner-tr { top: -10px; right: -10px; transform: scaleX(-1); }
+    .corner-bl { bottom: -10px; left: -10px; transform: scaleY(-1); }
+    .corner-br { bottom: -10px; right: -10px; transform: scale(-1); }
+
+    .flower-border-top {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .letter-header { 
+      display: flex; 
+      justify-content: space-between; 
+      margin-bottom: 40px; 
+      font-family: 'Cinzel', serif;
+      border-bottom: 1.5px solid rgba(160, 110, 70, 0.25);
+      padding-bottom: 16px;
+      font-weight: 700;
+      color: #5c3525;
+      position: relative;
+      z-index: 3;
+    }
+    .letter-body { 
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.75rem; 
+      line-height: 2; 
+      white-space: pre-wrap; 
+      margin-bottom: 60px; 
+      color: #2a150c;
+      min-height: 160px;
+      position: relative;
+      z-index: 3;
+    }
+    
+    /* Font variations for Love Letter */
+    .font-dancing { font-family: 'Dancing Script', cursive; font-size: 1.75rem; }
+    .font-greatvibes { font-family: 'Great Vibes', cursive; font-size: 2.1rem; line-height: 1.8; }
+    .font-playfair { font-family: 'Playfair Display', serif; font-size: 1.35rem; line-height: 1.9; font-style: italic; }
+
+    .letter-footer { 
+      text-align: right; 
+      position: relative;
+      z-index: 3;
+    }
+    .letter-footer-valediction {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.6rem;
+      color: #4a281c;
+    }
+    .letter-footer-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #3b1c10;
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    /* 3D Wax Seal with Crest */
+    .wax-seal-wrapper {
+      position: absolute;
+      bottom: 40px;
+      left: 65px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .wax-seal {
+      width: 72px;
+      height: 72px;
+      background: radial-gradient(circle at 35% 35%, #bf193c 0%, #850b23 60%, #4a0412 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #dfb15b;
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      box-shadow: 
+        0 8px 20px rgba(0,0,0,0.5),
+        inset 0 2px 5px rgba(255,255,255,0.4),
+        inset 0 -3px 8px rgba(0,0,0,0.6);
+      border: 3px solid #850b23;
+      user-select: none;
+      position: relative;
+    }
+    .wax-seal::after {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px dashed rgba(223, 177, 91, 0.4);
+      border-radius: 50%;
+    }
+
+    /* Lock Screen Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(12, 6, 12, 0.94);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .lock-box {
+      background: linear-gradient(160deg, rgba(38, 20, 36, 0.9), rgba(18, 9, 18, 0.95));
+      border: 1px solid var(--bg-card-border);
+      padding: 42px 32px;
+      border-radius: 28px;
+      text-align: center;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 35px var(--shadow-rose);
+      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .lock-box.shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+
+    .pin-display {
+      letter-spacing: 16px;
+      font-size: 2.3rem;
+      margin: 18px 0 24px 0;
+      color: var(--primary-rose);
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 0 12px var(--primary-rose-glow);
+    }
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .key-btn {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--bg-card-border);
+      color: var(--text-main);
+      width: 62px;
+      height: 62px;
+      margin: 0 auto;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .key-btn:hover { 
+      background: var(--primary-rose); 
+      border-color: var(--primary-rose);
+      color: #fff;
+      box-shadow: 0 0 15px var(--primary-rose-glow);
+    }
+    .key-btn:active { transform: scale(0.92); }
+
+    /* Toast Notification */
+    .toast-message {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: linear-gradient(135deg, rgba(42, 18, 32, 0.95), rgba(20, 10, 20, 0.95));
+      border: 1px solid var(--primary-rose);
+      color: var(--text-main);
+      padding: 14px 26px;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.92rem;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .toast-message.show { transform: translateY(0); opacity: 1; }
+
+    /* Selection Checkboxes for Letter Generator */
+    .entry-checkbox {
+      accent-color: var(--primary-rose);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    /* Print Styles */
+    @media print {
+      body * { visibility: hidden; }
+      .letter-paper-wrapper, .letter-paper-wrapper * { visibility: visible; }
+      .letter-paper-wrapper {
+        position: absolute; left: 0; top: 0; width: 100%;
+      }
+      .letter-paper { box-shadow: none; border: 1px solid #ccc; }
+    }
+
+    @media (max-width: 650px) {
+      .container { padding: 15px; }
+      .brand h1 { font-size: 1.5rem; }
+      .letter-paper { padding: 45px 25px 60px 25px; }
+      .wax-seal-wrapper { bottom: 20px; left: 25px; }
+      .wax-seal { width: 55px; height: 55px; font-size: 1.2rem; }
+      .corner-flower { width: 90px; height: 90px; }
+    }
+  </style>
 </head>
-<body class="min-h-screen pb-12 antialiased">
+<body>
 
-    <!-- Top Navigation / Header -->
-    <header class="sticky top-0 z-40 w-full glass-card border-b border-white/5 bg-opacity-90 px-4 py-4 mb-8">
-        <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center gap-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-full bg-roseAcc/20 flex items-center justify-center text-roseAcc border border-roseAcc/30 shadow-lg">
-                    <i class="fa-solid fa-heart text-xl animate-pulse"></i>
-                </div>
-                <div>
-                    <h1 class="font-serif text-2xl font-semibold tracking-wide text-white flex items-center gap-2">
-                        Dearest Thoughts
-                    </h1>
-                    <p class="text-xs text-pink-300/70 font-light">A safe haven for your hearts to connect</p>
-                </div>
-            </div>
+  <!-- Ambient Floating Petals -->
+  <div id="petalContainer"></div>
 
-            <div class="flex items-center space-x-3">
-                <!-- Sync Mode Indicator / Toggle Button -->
-                <button id="syncModalBtn" onclick="openSyncModal()" class="px-3 py-1.5 rounded-full text-xs font-medium flex items-center space-x-2 bg-roseAcc/10 border border-roseAcc/30 text-rose-300 hover:bg-roseAcc/20 transition">
-                    <span id="syncStatusDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span id="syncStatusText">Cloud Mode Active</span>
-                    <i class="fa-solid fa-gear ml-1 opacity-70"></i>
-                </button>
+  <!-- Ambient Side Floral Frames -->
+  <div class="floral-side floral-left">
+    <svg class="floral-svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4Z"/></svg>
+    <svg class="floral-svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/></svg>
+  </div>
+  <div class="floral-side floral-right">
+    <svg class="floral-svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/></svg>
+    <svg class="floral-svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 12,2Z"/></svg>
+  </div>
 
-                <!-- Daily Spark Button -->
-                <button onclick="showDailySpark()" class="px-3 py-1.5 rounded-full text-xs font-medium bg-white/5 hover:bg-white/10 text-gray-300 border border-white/10 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-sparkles text-amber-400"></i>
-                    <span>Daily Spark</span>
-                </button>
-            </div>
+  <!-- Lock Screen Modal -->
+  <div class="modal-overlay" id="lockModal">
+    <div class="lock-box" id="lockBox">
+      <div style="font-size: 2.2rem; margin-bottom: 8px;">🌹</div>
+      <h2 style="font-family:'Cinzel', serif; color: var(--primary-rose); font-size: 1.5rem;">Sanctuary Lock</h2>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-top:4px;">Enter PIN to Access (Default: 1234)</p>
+      <div class="pin-display" id="pinDisplay">••••</div>
+      <div class="keypad">
+        <button class="key-btn" onclick="pressKey('1')">1</button>
+        <button class="key-btn" onclick="pressKey('2')">2</button>
+        <button class="key-btn" onclick="pressKey('3')">3</button>
+        <button class="key-btn" onclick="pressKey('4')">4</button>
+        <button class="key-btn" onclick="pressKey('5')">5</button>
+        <button class="key-btn" onclick="pressKey('6')">6</button>
+        <button class="key-btn" onclick="pressKey('7')">7</button>
+        <button class="key-btn" onclick="pressKey('8')">8</button>
+        <button class="key-btn" onclick="pressKey('9')">9</button>
+        <button class="key-btn" onclick="clearPin()" style="font-size: 0.85rem; color: var(--text-muted);">CLR</button>
+        <button class="key-btn" onclick="pressKey('0')">0</button>
+        <button class="key-btn" onclick="checkPin()" style="color: var(--gold-accent);">✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Toast Notification -->
+  <div class="toast-message" id="toast">
+    <span id="toastIcon">✨</span>
+    <span id="toastText">Action completed</span>
+  </div>
+
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">🌹</div>
+        <div>
+          <h1>Dearest Thoughts</h1>
+          <p>A private romantic sanctuary for your heart</p>
         </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn" onclick="lockSanctuary()">🔒 Lock App</button>
+      </div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-4 space-y-8">
-
-        <!-- Today's Vibe Check -->
-        <section class="glass-card rounded-2xl p-6 transition-all duration-300">
-            <span class="text-xs font-semibold tracking-wider text-rose-400/80 uppercase">Today's Vibe Check</span>
-            <h2 class="font-serif text-xl sm:text-2xl text-white mt-1 mb-2">How is your heart feeling right now?</h2>
-            <p class="text-xs text-gray-400 mb-4">Select a mood to tune into your shared sanctuary space.</p>
-
-            <div class="flex flex-wrap gap-2.5" id="vibeContainer">
-                <button onclick="selectVibe('Loved', '🥰')" class="vibe-btn active border border-roseAcc/50 bg-roseAcc/20 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2 transition hover:border-roseAcc">
-                    <span>🥰</span> Loved
-                </button>
-                <button onclick="selectVibe('Happy', '😊')" class="vibe-btn border border-white/10 bg-white/5 text-gray-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2 transition hover:border-roseAcc">
-                    <span>😊</span> Happy
-                </button>
-                <button onclick="selectVibe('Nostalgic', '🌙')" class="vibe-btn border border-white/10 bg-white/5 text-gray-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2 transition hover:border-roseAcc">
-                    <span>🌙</span> Nostalgic
-                </button>
-                <button onclick="selectVibe('Thoughtful', '💭')" class="vibe-btn border border-white/10 bg-white/5 text-gray-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2 transition hover:border-roseAcc">
-                    <span>💭</span> Thoughtful
-                </button>
-                <button onclick="selectVibe('Peaceful', '🌿')" class="vibe-btn border border-white/10 bg-white/5 text-gray-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2 transition hover:border-roseAcc">
-                    <span>🌿</span> Peaceful
-                </button>
-            </div>
-        </section>
-
-        <!-- Form & Side Widgets Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- Left 2 Cols: Write a New Thought Form -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="glass-card rounded-2xl p-6 border border-white/10 relative overflow-hidden">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-feather-pointed text-roseAcc"></i>
-                            <h3 class="font-serif text-lg font-medium text-white">Write a New Thought</h3>
-                        </div>
-                        <span id="currentDateDisplay" class="text-xs text-gray-400 font-mono"></span>
-                    </div>
-
-                    <form id="thoughtForm" onsubmit="handlePostSubmit(event)" class="space-y-4">
-                        <!-- User Name Input -->
-                        <div>
-                            <label class="block text-xs text-gray-400 mb-1">Your Name / Nickname</label>
-                            <input type="text" id="authorInput" placeholder="e.g. Mahendra or Bestie" required
-                                class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-roseAcc transition">
-                        </div>
-
-                        <!-- Title Input -->
-                        <div>
-                            <input type="text" id="titleInput" placeholder="Give this thought a title..." required
-                                class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-roseAcc transition">
-                        </div>
-
-                        <!-- Main Thought Textarea -->
-                        <div>
-                            <textarea id="contentInput" rows="5" placeholder="Pour your heart out here... What are you feeling, thinking, or dreaming about today?" required
-                                class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-roseAcc transition resize-none"></textarea>
-                        </div>
-
-                        <!-- Submit Button Row -->
-                        <div class="flex items-center justify-between pt-2">
-                            <div class="text-xs text-gray-400 flex items-center gap-1.5">
-                                <i class="fa-solid fa-earth-americas text-rose-400"></i>
-                                <span>Visible in shared stream</span>
-                            </div>
-                            <button type="submit" id="submitBtn" class="bg-gradient-to-r from-roseAcc to-pink-600 hover:from-roseHover hover:to-pink-500 text-white font-medium px-6 py-2.5 rounded-xl text-sm transition shadow-lg shadow-roseAcc/20 flex items-center space-x-2">
-                                <span>Save Entry</span>
-                                <i class="fa-solid fa-bookmark text-xs"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Right 1 Col: Memory Box & Affirmation Cards -->
-            <div class="space-y-6">
-
-                <!-- Little Memory Box / Sticky Pin -->
-                <div class="glass-card rounded-2xl p-6 relative overflow-hidden">
-                    <div class="flex justify-between items-center mb-3">
-                        <h4 class="font-serif text-sm font-medium text-white flex items-center gap-2">
-                            <i class="fa-solid fa-thumbtack text-roseAcc text-xs"></i>
-                            Little Memory Box
-                        </h4>
-                        <button onclick="addStickyNote()" class="text-xs text-rose-400 hover:text-rose-300 font-medium">+ Pin Note</button>
-                    </div>
-                    <p class="text-xs text-gray-400 mb-3">Quick sweet memories, favorite quotes, or cute reminders.</p>
-
-                    <div id="stickyContainer" class="space-y-3 max-h-64 overflow-y-auto pr-1">
-                        <!-- Default Memory Sticky -->
-                        <div class="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-500/30 p-3 rounded-xl text-xs text-purple-200 space-y-1">
-                            <p class="italic">"Late-night talks and simple moments—with you, even doing nothing feels special."</p>
-                            <span class="block text-[10px] text-purple-400 text-right">— Pinned note</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Daily Love Affirmation -->
-                <div class="bg-gradient-to-br from-roseAcc/20 to-purple-900/30 border border-roseAcc/30 rounded-2xl p-6 text-white relative">
-                    <span class="text-[10px] font-bold tracking-widest uppercase text-rose-300 block mb-2">Daily Love Affirmation</span>
-                    <blockquote id="affirmationText" class="font-serif text-sm italic text-pink-100 leading-relaxed mb-3">
-                        "In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."
-                    </blockquote>
-                    <p id="affirmationAuthor" class="text-xs text-rose-300 text-right font-medium">— Maya Angelou</p>
-                    <button onclick="newAffirmation()" class="mt-4 w-full py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs text-pink-200 transition text-center flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-arrows-rotate text-[10px]"></i> Next Affirmation
-                    </button>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Shared Journal Feed Section -->
-        <section class="space-y-4 pt-4">
-            <div class="flex justify-between items-center border-b border-white/10 pb-3">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-book-bookmark text-roseAcc"></i>
-                    <h3 class="font-serif text-xl font-medium text-white">Shared Journal Archives</h3>
-                </div>
-                <span id="entryCountBadge" class="text-xs bg-white/10 px-2.5 py-1 rounded-full text-gray-300 font-mono">0 entries</span>
-            </div>
-
-            <!-- Entries List Feed -->
-            <div id="journalFeed" class="space-y-4">
-                <!-- Loading State -->
-                <div class="text-center py-12 glass-card rounded-2xl">
-                    <i class="fa-solid fa-circle-notch fa-spin text-roseAcc text-2xl mb-2"></i>
-                    <p class="text-xs text-gray-400">Connecting to shared sanctuary...</p>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Sync / Backend Settings Modal -->
-    <div id="syncModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-lg w-full rounded-2xl p-6 border border-white/15 space-y-4 text-white relative">
-            <button onclick="closeSyncModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-full bg-roseAcc/20 flex items-center justify-center text-roseAcc">
-                    <i class="fa-solid fa-cloud text-lg"></i>
-                </div>
-                <div>
-                    <h3 class="font-serif text-lg font-medium">Shared Database Connection</h3>
-                    <p class="text-xs text-gray-400">Connect to Firebase to share thoughts live with your friend!</p>
-                </div>
-            </div>
-
-            <div class="space-y-3 text-xs text-gray-300">
-                <p class="bg-white/5 p-3 rounded-xl border border-white/10">
-                    ✨ <strong>Default Mode:</strong> By default, this app uses an automatic real-time sync channel between tabs & windows. For complete cross-device live sharing over the internet, paste your free Firebase configuration below.
-                </p>
-
-                <div class="space-y-2">
-                    <label class="block text-gray-300 font-medium">Firebase Config (JSON format or JS object):</label>
-                    <textarea id="firebaseConfigInput" rows="5" placeholder='{\n  "apiKey": "AIzaSy...",\n  "authDomain": "your-app.firebaseapp.com",\n  "projectId": "your-app-id"\n}' class="w-full bg-black/60 border border-white/10 rounded-xl p-3 font-mono text-xs text-pink-200 focus:outline-none focus:border-roseAcc transition"></textarea>
-                </div>
-            </div>
-
-            <div class="flex justify-end space-x-3 pt-2">
-                <button onclick="resetToLocalSync()" class="px-4 py-2 rounded-xl text-xs bg-white/5 hover:bg-white/10 text-gray-300 border border-white/10 transition">
-                    Use Instant Local Sync
-                </button>
-                <button onclick="saveFirebaseConfig()" class="px-4 py-2 rounded-xl text-xs bg-roseAcc hover:bg-roseHover text-white font-medium transition">
-                    Connect Custom Firebase
-                </button>
-            </div>
-        </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('journalTab', this)">Journal Entries</button>
+      <button class="tab-btn" onclick="switchTab('letterTab', this)">Love Letter Studio</button>
     </div>
 
-    <!-- Application Script Logic -->
-    <script>
-        // Global State Variables
-        let currentMood = 'Loved';
-        let currentEmoji = '🥰';
-        let entries = [];
-        let firebaseApp = null;
-        let db = null;
-        let auth = null;
-        let unsubscribeSnapshot = null;
-        let useFirebase = false;
+    <!-- JOURNAL SECTION -->
+    <div id="journalTab" class="view-section active">
+      <div class="card">
+        <h3 id="formHeading" style="font-family: 'Cinzel', serif; margin-bottom: 18px; color: var(--primary-rose); font-size: 1.3rem; display: flex; align-items: center; gap: 8px;">
+          <span>✍️</span> Compose New Thought
+        </h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+          <div>
+            <label for="thoughtTitle">Title</label>
+            <input type="text" id="thoughtTitle" placeholder="e.g. Under the starlit sky..." maxlength="70">
+          </div>
+          <div>
+            <label for="thoughtMood">Mood / Sentiment</label>
+            <select id="thoughtMood">
+              <option value="Heartfelt 💖">Heartfelt 💖</option>
+              <option value="Passionate 🔥">Passionate 🔥</option>
+              <option value="Dreamy 🌙">Dreamy 🌙</option>
+              <option value="Tender 🌸">Tender 🌸</option>
+              <option value="Eternal ⏳">Eternal ⏳</option>
+            </select>
+          </div>
+        </div>
 
-        // Custom BroadcastChannel for instant cross-tab live sync fallback
-        const broadcastChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('dearest_thoughts_channel') : null;
+        <label for="thoughtBody">Your Note</label>
+        <textarea id="thoughtBody" rows="4" placeholder="Pour your feelings out here..."></textarea>
+        
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button class="btn btn-danger" id="cancelEditBtn" onclick="resetForm()" style="display: none;">Cancel Edit</button>
+          <button class="btn btn-gold" id="saveBtn" onclick="saveThought()">Save Thought</button>
+        </div>
+      </div>
 
-        // App Initialization
-        window.addEventListener('load', async () => {
-            // Set date display
-            const now = new Date();
-            document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      <div class="card">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="🔍 Search thoughts..." oninput="renderThoughts()">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3 style="font-family: 'Cinzel', serif; font-size: 1.2rem;">Saved Entries</h3>
+          <span id="entryCount" style="font-size: 0.82rem; color: var(--gold-accent);">0 Entries</span>
+        </div>
+        <div class="journal-grid" id="journalGrid"></div>
+      </div>
+    </div>
 
-            // Load stored username if available
-            const savedName = localStorage.getItem('dt_user_name');
-            if (savedName) {
-                document.getElementById('authorInput').value = savedName;
-            }
+    <!-- LOVE LETTER SECTION -->
+    <div id="letterTab" class="view-section">
+      <div class="card">
+        <h3 style="font-family: 'Cinzel', serif; margin-bottom: 18px; color: var(--primary-rose); font-size: 1.3rem;">Love Letter Studio</h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+          <div>
+            <label for="letterTo">Recipient (To)</label>
+            <input type="text" id="letterTo" placeholder="My Beloved" oninput="updateLetterPreview()">
+          </div>
+          <div>
+            <label for="letterFrom">Sender (From)</label>
+            <input type="text" id="letterFrom" placeholder="Forever Yours" oninput="updateLetterPreview()">
+          </div>
+          <div>
+            <label for="letterDate">Date</label>
+            <input type="text" id="letterDate" oninput="updateLetterPreview()">
+          </div>
+          <div>
+            <label for="fontSelect">Handwritten Style</label>
+            <select id="fontSelect" onchange="changeLetterFont(this.value)">
+              <option value="font-dancing">Dancing Script (Classic)</option>
+              <option value="font-greatvibes">Great Vibes (Romantic)</option>
+              <option value="font-playfair">Playfair Display (Elegant)</option>
+            </select>
+          </div>
+        </div>
 
-            // Initialize storage/sync mode
-            initDatabase();
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 5px;">
+          <button class="btn btn-gold" onclick="compileSelectedThoughts()">🌹 Compile Selected Thoughts</button>
+          <button class="btn" onclick="printLetter()">🖨️ Print / Save Letter</button>
+        </div>
+      </div>
 
-            // Listen to tab broadcast messages for fallback mode
-            if (broadcastChannel) {
-                broadcastChannel.onmessage = (event) => {
-                    if (event.data && event.data.type === 'SYNC_ENTRIES' && !useFirebase) {
-                        entries = event.data.entries;
-                        renderFeed();
-                    }
-                };
-            }
-        });
+      <!-- Flower-Decorated Parchment Paper -->
+      <div class="letter-paper-wrapper">
+        <div class="letter-paper" id="letterPaper">
+          
+          <!-- Top Border Flower Garland -->
+          <svg class="flower-border-top" viewBox="0 0 300 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 20 C 80 5, 220 5, 290 20" stroke="#a26c48" stroke-width="1.5" stroke-dasharray="4 2"/>
+            <circle cx="150" cy="12" r="5" fill="#e88399"/>
+            <circle cx="135" cy="15" r="3.5" fill="#dfb15b"/>
+            <circle cx="165" cy="15" r="3.5" fill="#dfb15b"/>
+            <path d="M140 15 Q 130 5 120 16 Q 135 22 140 15 Z" fill="#7a9a60" opacity="0.8"/>
+            <path d="M160 15 Q 170 5 180 16 Q 165 22 160 15 Z" fill="#7a9a60" opacity="0.8"/>
+          </svg>
 
-        // Vibe Selector
-        function selectVibe(mood, emoji) {
-            currentMood = mood;
-            currentEmoji = emoji;
-            const buttons = document.querySelectorAll('.vibe-btn');
-            buttons.forEach(btn => {
-                if (btn.textContent.includes(mood)) {
-                    btn.classList.add('active', 'border-roseAcc/50', 'bg-roseAcc/20', 'text-white');
-                    btn.classList.remove('border-white/10', 'bg-white/5', 'text-gray-300');
-                } else {
-                    btn.classList.remove('active', 'border-roseAcc/50', 'bg-roseAcc/20', 'text-white');
-                    btn.classList.add('border-white/10', 'bg-white/5', 'text-gray-300');
-                }
-            });
+          <!-- SVG Corner Flower Illustrations -->
+          <svg class="corner-flower corner-tl" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g opacity="0.85">
+              <!-- Stem & Leaves -->
+              <path d="M10 10 Q 50 20 80 80" stroke="#5d7a44" stroke-width="2.5" fill="none"/>
+              <path d="M25 22 Q 40 10 50 25 Q 35 35 25 22 Z" fill="#6b8e4e"/>
+              <path d="M45 42 Q 65 30 70 48 Q 55 58 45 42 Z" fill="#6b8e4e"/>
+              <!-- Blooming Rose 1 -->
+              <circle cx="25" cy="22" r="9" fill="#d95d77"/>
+              <circle cx="23" cy="20" r="6" fill="#ee8fa3"/>
+              <circle cx="25" cy="22" r="3" fill="#800e28"/>
+              <!-- Blooming Rose 2 -->
+              <circle cx="55" cy="55" r="12" fill="#c94b66"/>
+              <circle cx="52" cy="52" r="8" fill="#e88399"/>
+              <circle cx="55" cy="55" r="4" fill="#68091e"/>
+              <!-- Small Buds -->
+              <circle cx="75" cy="75" r="5" fill="#dfb15b"/>
+            </g>
+          </svg>
+
+          <svg class="corner-flower corner-tr" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g opacity="0.85">
+              <path d="M10 10 Q 50 20 80 80" stroke="#5d7a44" stroke-width="2.5" fill="none"/>
+              <path d="M25 22 Q 40 10 50 25 Q 35 35 25 22 Z" fill="#6b8e4e"/>
+              <path d="M45 42 Q 65 30 70 48 Q 55 58 45 42 Z" fill="#6b8e4e"/>
+              <circle cx="25" cy="22" r="9" fill="#d95d77"/>
+              <circle cx="23" cy="20" r="6" fill="#ee8fa3"/>
+              <circle cx="55" cy="55" r="12" fill="#c94b66"/>
+              <circle cx="52" cy="52" r="8" fill="#e88399"/>
+              <circle cx="75" cy="75" r="5" fill="#dfb15b"/>
+            </g>
+          </svg>
+
+          <svg class="corner-flower corner-bl" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g opacity="0.85">
+              <path d="M10 10 Q 50 20 80 80" stroke="#5d7a44" stroke-width="2.5" fill="none"/>
+              <path d="M25 22 Q 40 10 50 25 Q 35 35 25 22 Z" fill="#6b8e4e"/>
+              <circle cx="55" cy="55" r="12" fill="#c94b66"/>
+              <circle cx="52" cy="52" r="8" fill="#e88399"/>
+              <circle cx="75" cy="75" r="5" fill="#dfb15b"/>
+            </g>
+          </svg>
+
+          <svg class="corner-flower corner-br" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g opacity="0.85">
+              <path d="M10 10 Q 50 20 80 80" stroke="#5d7a44" stroke-width="2.5" fill="none"/>
+              <path d="M25 22 Q 40 10 50 25 Q 35 35 25 22 Z" fill="#6b8e4e"/>
+              <circle cx="55" cy="55" r="12" fill="#c94b66"/>
+              <circle cx="52" cy="52" r="8" fill="#e88399"/>
+              <circle cx="75" cy="75" r="5" fill="#dfb15b"/>
+            </g>
+          </svg>
+
+          <!-- Letter Content -->
+          <div class="letter-header">
+            <span id="dispTo">To: My Dearest</span>
+            <span id="dispDate">Nov 5, 2026</span>
+          </div>
+          
+          <div class="letter-body font-dancing" id="dispBody">Select thoughts from your journal entries to weave together your personalized love letter...</div>
+          
+          <div class="letter-footer">
+            <div class="letter-footer-valediction">With all my love & devotion,</div>
+            <div class="letter-footer-name" id="dispFromSignature">Forever Yours</div>
+          </div>
+
+          <!-- 3D Red Wax Seal with Crest -->
+          <div class="wax-seal-wrapper">
+            <div class="wax-seal">
+              <span>❦</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // App State
+    let currentPin = "1234";
+    let enteredPin = "";
+    let editingId = null;
+    let selectedThoughtIds = new Set();
+    let thoughts = JSON.parse(localStorage.getItem('dearest_thoughts_v2') || '[]');
+
+    // Default Seed Data if empty
+    if (thoughts.length === 0) {
+      thoughts = [
+        {
+          id: 101,
+          title: "Moonlight Reflections",
+          mood: "Dreamy 🌙",
+          body: "Whenever I gaze up at the night sky, every twinkling star reminds me of the light you bring into my life.",
+          date: "Nov 5, 2026"
+        },
+        {
+          id: 102,
+          title: "Forever & Always",
+          mood: "Eternal ⏳",
+          body: "In a world full of constant change, my feelings for you remain steady, warm, and everlasting.",
+          date: "Nov 5, 2026"
         }
+      ];
+      localStorage.setItem('dearest_thoughts_v2', JSON.stringify(thoughts));
+    }
 
-        // Initialize Firebase or Local Storage Engine
-        async function initDatabase() {
-            const savedFBConfig = localStorage.getItem('dt_firebase_config');
-            const globalAppId = typeof __app_id !== 'undefined' ? __app_id : 'dearest-thoughts-app';
-            const globalFBConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+    // Set Default Letter Date
+    const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    document.getElementById('letterDate').value = todayStr;
+    document.getElementById('dispDate').innerText = todayStr;
 
-            const activeConfig = savedFBConfig ? JSON.parse(savedFBConfig) : globalFBConfig;
+    // Toast Notification System
+    function showToast(msg, icon = '✨') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastText').innerText = msg;
+      document.getElementById('toastIcon').innerText = icon;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3200);
+    }
 
-            if (activeConfig && window.FB) {
-                try {
-                    const { initializeApp, getFirestore, getAuth, signInAnonymously, signInWithCustomToken, onSnapshot, collection } = window.FB;
-                    
-                    firebaseApp = initializeApp(activeConfig);
-                    db = getFirestore(firebaseApp);
-                    auth = getAuth(firebaseApp);
+    // Dynamic Swaying Petals
+    function createPetals() {
+      const container = document.getElementById('petalContainer');
+      container.innerHTML = '';
+      for(let i = 0; i < 20; i++) {
+        let petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.style.left = Math.random() * 100 + 'vw';
+        let size = Math.random() * 12 + 10;
+        petal.style.width = size + 'px';
+        petal.style.height = (size * 1.3) + 'px';
+        petal.style.animationDuration = (Math.random() * 6 + 7) + 's';
+        petal.style.animationDelay = (Math.random() * 5) + 's';
+        container.appendChild(petal);
+      }
+    }
+    createPetals();
 
-                    // Sign in to Firebase Auth
-                    const customToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                    if (customToken) {
-                        await signInWithCustomToken(auth, customToken);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
+    // Lock System
+    function pressKey(num) {
+      if(enteredPin.length < 4) {
+        enteredPin += num;
+        updatePinDisplay();
+      }
+    }
+    function clearPin() { enteredPin = ""; updatePinDisplay(); }
+    function updatePinDisplay() {
+      document.getElementById('pinDisplay').innerText = enteredPin.length === 0 ? '••••' : '•'.repeat(enteredPin.length);
+    }
 
-                    useFirebase = true;
-                    updateSyncBadge(true, "Firebase Cloud Live");
+    function checkPin() {
+      if(enteredPin === currentPin) {
+        document.getElementById('lockModal').style.display = 'none';
+        enteredPin = "";
+        updatePinDisplay();
+        showToast("Sanctuary Unlocked", "🔓");
+      } else {
+        const box = document.getElementById('lockBox');
+        box.classList.add('shake');
+        setTimeout(() => box.classList.remove('shake'), 400);
+        showToast("Incorrect PIN Code", "❌");
+        clearPin();
+      }
+    }
 
-                    // Firebase Path setup following mandatory artifact guidelines
-                    const collectionPath = collection(db, 'artifacts', globalAppId, 'public', 'data', 'journal_entries');
+    function lockSanctuary() {
+      enteredPin = "";
+      updatePinDisplay();
+      document.getElementById('lockModal').style.display = 'flex';
+      showToast("Sanctuary Locked", "🔒");
+    }
 
-                    // Real-time snapshot listener
-                    unsubscribeSnapshot = onSnapshot(collectionPath, (snapshot) => {
-                        const fetched = [];
-                        snapshot.forEach(docSnap => {
-                            fetched.push({ id: docSnap.id, ...docSnap.data() });
-                        });
+    // Tabs
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
 
-                        // Sort in memory (newest first) to comply with simple query rule
-                        fetched.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                        entries = fetched;
-                        renderFeed();
-                    }, (error) => {
-                        console.warn("Firestore error, falling back to local sync:", error);
-                        fallbackToLocalStorage();
-                    });
+      if(tabId === 'letterTab') {
+        updateLetterPreview();
+      }
+    }
 
-                    return;
-                } catch (err) {
-                    console.error("Firebase Initialization failed, using local storage fallback:", err);
-                }
-            }
+    // Save or Edit Journal Thought
+    function saveThought() {
+      const title = document.getElementById('thoughtTitle').value.trim();
+      const mood = document.getElementById('thoughtMood').value;
+      const body = document.getElementById('thoughtBody').value.trim();
 
-            fallbackToLocalStorage();
+      if(!title || !body) {
+        showToast('Please enter both title and body', '⚠️');
+        return;
+      }
+
+      if (editingId) {
+        thoughts = thoughts.map(t => t.id === editingId ? { ...t, title, mood, body } : t);
+        showToast('Thought updated', '✏️');
+      } else {
+        const entry = { id: Date.now(), title, mood, body, date: todayStr };
+        thoughts.unshift(entry);
+        showToast('Thought saved to sanctuary', '💖');
+      }
+
+      localStorage.setItem('dearest_thoughts_v2', JSON.stringify(thoughts));
+      resetForm();
+      renderThoughts();
+    }
+
+    function editThought(id) {
+      const t = thoughts.find(item => item.id === id);
+      if(!t) return;
+
+      document.getElementById('thoughtTitle').value = t.title;
+      document.getElementById('thoughtMood').value = t.mood;
+      document.getElementById('thoughtBody').value = t.body;
+      document.getElementById('formHeading').innerHTML = "<span>✏️</span> Edit Thought";
+      document.getElementById('saveBtn').innerText = "Update Thought";
+      document.getElementById('cancelEditBtn').style.display = "inline-flex";
+      editingId = id;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteThought(id) {
+      thoughts = thoughts.filter(t => t.id !== id);
+      selectedThoughtIds.delete(id);
+      localStorage.setItem('dearest_thoughts_v2', JSON.stringify(thoughts));
+      renderThoughts();
+      showToast('Entry removed', '🗑️');
+      if(editingId === id) resetForm();
+    }
+
+    function resetForm() {
+      document.getElementById('thoughtTitle').value = '';
+      document.getElementById('thoughtBody').value = '';
+      document.getElementById('formHeading').innerHTML = "<span>✍️</span> Compose New Thought";
+      document.getElementById('saveBtn').innerText = "Save Thought";
+      document.getElementById('cancelEditBtn').style.display = "none";
+      editingId = null;
+    }
+
+    function toggleThoughtSelection(id) {
+      if(selectedThoughtIds.has(id)) {
+        selectedThoughtIds.delete(id);
+      } else {
+        selectedThoughtIds.add(id);
+      }
+      renderThoughts();
+    }
+
+    function renderThoughts() {
+      const grid = document.getElementById('journalGrid');
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      
+      const filtered = thoughts.filter(t => 
+        t.title.toLowerCase().includes(query) || t.body.toLowerCase().includes(query)
+      );
+
+      document.getElementById('entryCount').innerText = `${filtered.length} ${filtered.length === 1 ? 'Entry' : 'Entries'}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 45px; color: var(--text-muted);">
+            <p style="font-size: 1.1rem; font-style: italic;">No thoughts match your query.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(t => {
+        const isSelected = selectedThoughtIds.has(t.id);
+        return `
+          <div class="journal-item ${isSelected ? 'selected-for-letter' : ''}">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <h4>${escapeHtml(t.title)}</h4>
+                <input type="checkbox" class="entry-checkbox" ${isSelected ? 'checked' : ''} 
+                       onclick="toggleThoughtSelection(${t.id})" title="Include in Love Letter">
+              </div>
+              <div class="meta">
+                <span>${t.date}</span>
+                <span class="mood-tag">${t.mood}</span>
+              </div>
+              <div class="body-text">${escapeHtml(t.body)}</div>
+            </div>
+            <div class="card-actions">
+              <button class="btn-icon" onclick="copyThought('${escapeHtml(t.body)}')">📋 Copy</button>
+              <div>
+                <button class="btn-icon" onclick="editThought(${t.id})">✏️ Edit</button>
+                <button class="btn-icon btn-icon-danger" onclick="deleteThought(${t.id})">🗑️</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function copyThought(text) {
+      const tempInput = document.createElement('textarea');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      showToast('Copied note to clipboard', '📋');
+    }
+
+    // Love Letter Compiler
+    function compileSelectedThoughts() {
+      if(selectedThoughtIds.size === 0) {
+        // If none checked, compile all
+        if(thoughts.length === 0) {
+          showToast('No thoughts available to compile', '⚠️');
+          return;
         }
+        const fullBody = thoughts.map(t => `~ ${t.title} ~\n${t.body}`).join("\n\n");
+        document.getElementById('dispBody').innerText = fullBody;
+        showToast('Compiled all saved thoughts!', '🌹');
+      } else {
+        const selectedList = thoughts.filter(t => selectedThoughtIds.has(t.id));
+        const fullBody = selectedList.map(t => `~ ${t.title} ~\n${t.body}`).join("\n\n");
+        document.getElementById('dispBody').innerText = fullBody;
+        showToast(`Compiled ${selectedList.length} selected thoughts!`, '🌹');
+      }
+    }
 
-        function fallbackToLocalStorage() {
-            useFirebase = false;
-            updateSyncBadge(false, "Local Real-Time Sync");
-            const localData = localStorage.getItem('dt_local_entries');
-            if (localData) {
-                try {
-                    entries = JSON.parse(localData);
-                } catch(e) {
-                    entries = getSampleEntries();
-                }
-            } else {
-                entries = getSampleEntries();
-                localStorage.setItem('dt_local_entries', JSON.stringify(entries));
-            }
-            renderFeed();
-        }
+    function updateLetterPreview() {
+      const toVal = document.getElementById('letterTo').value.trim() || "My Dearest";
+      const fromVal = document.getElementById('letterFrom').value.trim() || "Forever Yours";
+      const dateVal = document.getElementById('letterDate').value.trim() || todayStr;
+      
+      document.getElementById('dispTo').innerText = "To: " + toVal;
+      document.getElementById('dispFromSignature').innerText = fromVal;
+      document.getElementById('dispDate').innerText = dateVal;
 
-        function updateSyncBadge(isFirebase, text) {
-            const dot = document.getElementById('syncStatusDot');
-            const txt = document.getElementById('syncStatusText');
-            txt.textContent = text;
-            if (isFirebase) {
-                dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping";
-            } else {
-                dot.className = "w-2 h-2 rounded-full bg-amber-400";
-            }
-        }
+      const currentBody = document.getElementById('dispBody').innerText;
+      if (currentBody.startsWith("Select thoughts") && thoughts.length > 0) {
+        compileSelectedThoughts();
+      }
+    }
 
-        // Render Journal Feed
-        function renderFeed() {
-            const container = document.getElementById('journalFeed');
-            const badge = document.getElementById('entryCountBadge');
-            
-            badge.textContent = `${entries.length} ${entries.length === 1 ? 'entry' : 'entries'}`;
+    function changeLetterFont(fontClass) {
+      const body = document.getElementById('dispBody');
+      body.className = `letter-body ${fontClass}`;
+    }
 
-            if (!entries || entries.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-12 glass-card rounded-2xl border border-white/5">
-                        <i class="fa-regular fa-heart text-3xl text-roseAcc/50 mb-3 block"></i>
-                        <h4 class="font-serif text-base text-gray-300">No thoughts shared yet</h4>
-                        <p class="text-xs text-gray-500 mt-1">Be the first to leave a message in your sanctuary!</p>
-                    </div>
-                `;
-                return;
-            }
+    function printLetter() { window.print(); }
 
-            container.innerHTML = entries.map(item => {
-                const dateStr = item.dateFormatted || new Date(item.timestamp || Date.now()).toLocaleString([], {
-                    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                });
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
 
-                return `
-                    <article class="glass-card rounded-2xl p-6 border border-white/10 transition-all hover:border-roseAcc/40 relative group">
-                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                            <div class="flex items-center space-x-2.5">
-                                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-roseAcc to-purple-600 flex items-center justify-center text-xs font-bold text-white shadow">
-                                    ${(item.author || 'A').charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-semibold text-white flex items-center gap-1.5">
-                                        <span>${escapeHtml(item.author || 'Anonymous')}</span>
-                                    </h4>
-                                    <span class="text-[10px] text-gray-400 font-mono">${dateStr}</span>
-                                </div>
-                            </div>
-
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-roseAcc/10 border border-roseAcc/20 text-rose-300 flex items-center gap-1.5">
-                                <span>${item.emoji || '💖'}</span> ${item.mood || 'Loved'}
-                            </span>
-                        </div>
-
-                        <h3 class="font-serif text-lg font-semibold text-pink-50 mb-2">${escapeHtml(item.title)}</h3>
-                        <p class="text-sm text-gray-300 leading-relaxed whitespace-pre-line mb-4 font-light">${escapeHtml(item.content)}</p>
-
-                        <div class="flex items-center justify-between pt-3 border-t border-white/5 text-xs text-gray-400">
-                            <button onclick="toggleHeart('${item.id}')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-roseAcc/20 hover:text-rose-300 transition ${item.likes > 0 ? 'text-rose-400' : ''}">
-                                <i class="fa-solid fa-heart ${item.likes > 0 ? 'text-roseAcc animate-bounce' : ''}"></i>
-                                <span>${item.likes || 0} ${item.likes === 1 ? 'Heart' : 'Hearts'}</span>
-                            </button>
-                            <span class="text-[10px] text-gray-500 italic">Dearest Sanctuary</span>
-                        </div>
-                    </article>
-                `;
-            }).join('');
-        }
-
-        // Post Submission Handler
-        async function handlePostSubmit(e) {
-            e.preventDefault();
-
-            const author = document.getElementById('authorInput').value.trim();
-            const title = document.getElementById('titleInput').value.trim();
-            const content = document.getElementById('contentInput').value.trim();
-
-            if (!author || !title || !content) return;
-
-            // Save author name locally for convenience
-            localStorage.setItem('dt_user_name', author);
-
-            const newEntry = {
-                author,
-                title,
-                content,
-                mood: currentMood,
-                emoji: currentEmoji,
-                timestamp: Date.now(),
-                likes: 0,
-                dateFormatted: new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-            };
-
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-xs"></i> <span>Saving...</span>`;
-
-            if (useFirebase && db) {
-                try {
-                    const globalAppId = typeof __app_id !== 'undefined' ? __app_id : 'dearest-thoughts-app';
-                    const { collection, addDoc } = window.FB;
-                    const collectionPath = collection(db, 'artifacts', globalAppId, 'public', 'data', 'journal_entries');
-                    await addDoc(collectionPath, {
-                        ...newEntry,
-                        serverTimestamp: window.FB.serverTimestamp()
-                    });
-                } catch (err) {
-                    console.error("Firebase write error:", err);
-                    saveLocally(newEntry);
-                }
-            } else {
-                saveLocally(newEntry);
-            }
-
-            // Reset Form fields except Name
-            document.getElementById('titleInput').value = '';
-            document.getElementById('contentInput').value = '';
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = `<span>Save Entry</span> <i class="fa-solid fa-bookmark text-xs"></i>`;
-        }
-
-        function saveLocally(entry) {
-            entry.id = 'local_' + Date.now();
-            entries.unshift(entry);
-            localStorage.setItem('dt_local_entries', JSON.stringify(entries));
-            
-            // Broadcast to other open tabs
-            if (broadcastChannel) {
-                broadcastChannel.postMessage({ type: 'SYNC_ENTRIES', entries });
-            }
-            renderFeed();
-        }
-
-        // Like / Heart Toggle
-        async function toggleHeart(id) {
-            const target = entries.find(e => e.id === id);
-            if (!target) return;
-
-            target.likes = (target.likes || 0) + 1;
-
-            if (useFirebase && db && !id.startsWith('local_')) {
-                try {
-                    const globalAppId = typeof __app_id !== 'undefined' ? __app_id : 'dearest-thoughts-app';
-                    const { doc, updateDoc } = window.FB;
-                    const docRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'journal_entries', id);
-                    await updateDoc(docRef, { likes: target.likes });
-                } catch (err) {
-                    console.error("Error updating likes:", err);
-                }
-            } else {
-                localStorage.setItem('dt_local_entries', JSON.stringify(entries));
-                if (broadcastChannel) {
-                    broadcastChannel.postMessage({ type: 'SYNC_ENTRIES', entries });
-                }
-                renderFeed();
-            }
-        }
-
-        // Sticky Note Pin Feature
-        function addStickyNote() {
-            const noteText = prompt("Write a quick memory or note to pin:");
-            if (!noteText) return;
-
-            const container = document.getElementById('stickyContainer');
-            const noteEl = document.createElement('div');
-            noteEl.className = "bg-gradient-to-br from-rose-900/40 to-purple-900/40 border border-rose-500/30 p-3 rounded-xl text-xs text-rose-100 space-y-1 animate-fade-in";
-            noteEl.innerHTML = `
-                <p class="italic">"${escapeHtml(noteText)}"</p>
-                <span class="block text-[10px] text-rose-300 text-right">— Pinned just now</span>
-            `;
-            container.prepend(noteEl);
-        }
-
-        // Daily Affirmations
-        const affirmations = [
-            { quote: "In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine.", author: "Maya Angelou" },
-            { quote: "Whatever our souls are made of, his and mine are the same.", author: "Emily Brontë" },
-            { quote: "I swear I couldn't love you more than I do right now, and yet I know I will tomorrow.", author: "Leo Christopher" },
-            { quote: "You are my heart, my life, my one and only thought.", author: "Arthur Conan Doyle" }
-        ];
-
-        function newAffirmation() {
-            const rand = affirmations[Math.floor(Math.random() * affirmations.length)];
-            document.getElementById('affirmationText').textContent = `"${rand.quote}"`;
-            document.getElementById('affirmationAuthor').textContent = `— ${rand.author}`;
-        }
-
-        function showDailySpark() {
-            alert("💖 Daily Spark Prompt:\nWhat is one small thing your friend did recently that made you smile?");
-        }
-
-        // Modal Handlers
-        function openSyncModal() {
-            document.getElementById('syncModal').classList.remove('hidden');
-        }
-
-        function closeSyncModal() {
-            document.getElementById('syncModal').classList.add('hidden');
-        }
-
-        function saveFirebaseConfig() {
-            const raw = document.getElementById('firebaseConfigInput').value.trim();
-            if (!raw) return;
-            try {
-                const parsed = JSON.parse(raw);
-                localStorage.setItem('dt_firebase_config', JSON.stringify(parsed));
-                closeSyncModal();
-                location.reload();
-            } catch (err) {
-                alert("Please enter a valid JSON config object.");
-            }
-        }
-
-        function resetToLocalSync() {
-            localStorage.removeItem('dt_firebase_config');
-            closeSyncModal();
-            location.reload();
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>"']/g, function(m) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
-            });
-        }
-
-        function getSampleEntries() {
-            return [
-                {
-                    id: 'sample_1',
-                    author: 'Mahendra',
-                    title: 'Her Smile is My Favorite Place',
-                    content: 'It\'s the small things that I love the most—like how her eyes light up when she talks about something she loves, or how she easily brings peace to my stressful days.',
-                    mood: 'Loved',
-                    emoji: '🥰',
-                    timestamp: Date.now() - 3600000,
-                    likes: 3,
-                    dateFormatted: 'Today, 7:15 AM'
-                }
-            ];
-        }
-    </script>
+    // Initial Render
+    renderThoughts();
+  </script>
 </body>
 </html>
