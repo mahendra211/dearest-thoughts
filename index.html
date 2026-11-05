@@ -4,86 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dearest Thoughts | Romantic Sanctuary</title>
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Dancing+Script:wght@500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@500;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-dark: #120912;
-      --bg-card: rgba(30, 18, 30, 0.75);
-      --bg-card-border: rgba(232, 131, 153, 0.22);
+      --bg-card: #1c111c;
+      --bg-card-border: rgba(225, 112, 137, 0.18);
       --primary-rose: #e88399;
-      --primary-rose-glow: rgba(232, 131, 153, 0.45);
-      --deep-burgundy: #2c1220;
-      --gold-accent: #d4af37;
-      --gold-hover: #f3cf68;
-      --gold-glow: rgba(212, 175, 55, 0.35);
-      --text-main: #f8eef3;
-      --text-muted: #bda8b5;
-      --shadow-rose: rgba(232, 131, 153, 0.12);
-      --danger: #e74c3c;
+      --accent-pink: #ff6b8b;
+      --deep-purple: #261329;
+      --gold-accent: #dfb15b;
+      --text-main: #f5eaef;
+      --text-muted: #a6909e;
+      --shadow-rose: rgba(232, 131, 153, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    
+
     body {
       background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(circle at 15% 20%, rgba(232, 131, 153, 0.08) 0%, transparent 45%),
-        radial-gradient(circle at 85% 80%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(44, 18, 32, 0.4) 0%, transparent 100%);
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Swaying Petals Animation */
+    /* Floating Petals Animation */
     .petal {
       position: fixed;
-      background: radial-gradient(circle at 30% 30%, #f4aab9 0%, #e88399 50%, #800e28 100%);
-      border-radius: 80% 0 80% 0;
-      opacity: 0.7;
+      background: radial-gradient(circle, #e88399 0%, #800e28 100%);
+      border-radius: 15px 0 15px 0;
+      opacity: 0.5;
       pointer-events: none;
       z-index: 1;
-      animation: floatSway linear infinite;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      filter: drop-shadow(0 2px 4px rgba(232, 131, 153, 0.3));
+      animation: floatDown linear infinite;
     }
-
-    @keyframes floatSway {
-      0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
-      10% { opacity: 0.85; }
-      50% { transform: translateY(50vh) rotate(180deg) translateX(40px); }
-      90% { opacity: 0.7; }
-      100% { transform: translateY(105vh) rotate(360deg) translateX(-20px); opacity: 0; }
+    @keyframes floatDown {
+      0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0.7; }
+      50% { transform: translateY(50vh) rotate(180deg) translateX(25px); opacity: 0.4; }
+      100% { transform: translateY(105vh) rotate(360deg) translateX(-15px); opacity: 0; }
     }
-
-    /* Ambient Side Floral Frames */
-    .floral-side {
-      position: fixed;
-      top: 0; bottom: 0;
-      width: 140px;
-      pointer-events: none;
-      z-index: 2;
-      opacity: 0.3;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 30px 0;
-    }
-    .floral-left { left: 0; background: linear-gradient(90deg, rgba(232,131,153,0.15), transparent); }
-    .floral-right { right: 0; background: linear-gradient(-90deg, rgba(232,131,153,0.15), transparent); }
-    .floral-svg { width: 90px; fill: var(--primary-rose); margin: auto; filter: drop-shadow(0 0 10px var(--primary-rose-glow)); }
 
     /* Main Container */
     .container {
       max-width: 1050px;
       margin: 0 auto;
-      padding: 25px 20px;
+      padding: 25px 20px 60px;
       position: relative;
       z-index: 5;
     }
@@ -93,498 +59,286 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 24px 0;
+      padding-bottom: 20px;
       border-bottom: 1px solid var(--bg-card-border);
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-      gap: 15px;
+      margin-bottom: 25px;
     }
 
-    .brand { display: flex; align-items: center; gap: 15px; }
-    .brand-icon {
-      width: 48px; height: 48px;
-      background: radial-gradient(circle, var(--deep-burgundy), var(--bg-dark));
-      border: 1px solid var(--gold-accent);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 15px var(--gold-glow);
-    }
     .brand h1 {
       font-family: 'Cinzel', serif;
       font-size: 2.1rem;
-      background: linear-gradient(135deg, #fff 0%, var(--primary-rose) 60%, var(--gold-accent) 100%);
+      background: linear-gradient(135deg, #ffffff 40%, var(--primary-rose));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
     }
-    .brand p { font-size: 0.88rem; color: var(--text-muted); font-style: italic; }
+    .brand p { font-size: 0.85rem; color: var(--text-muted); font-style: italic; font-family: 'Playfair Display', serif; }
 
-    /* Buttons */
+    .header-actions { display: flex; gap: 12px; }
+
     .btn {
-      background: var(--bg-card);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--bg-card-border);
       color: var(--text-main);
-      padding: 10px 20px;
-      border-radius: 30px;
+      padding: 9px 18px;
+      border-radius: 20px;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      font-size: 0.88rem;
-      font-weight: 500;
-      display: inline-flex;
+      transition: all 0.3s ease;
+      font-size: 0.85rem;
+      display: flex;
       align-items: center;
-      gap: 8px;
-      user-select: none;
-      backdrop-filter: blur(10px);
+      gap: 7px;
     }
-    .btn:hover { 
-      background: var(--primary-rose); 
-      border-color: var(--primary-rose); 
-      color: #fff; 
-      box-shadow: 0 4px 20px var(--primary-rose-glow);
-      transform: translateY(-2px);
-    }
-    .btn:active { transform: translateY(0); }
-    
-    .btn-gold { 
-      border-color: var(--gold-accent); 
-      color: var(--gold-accent); 
-    }
-    .btn-gold:hover { 
-      background: linear-gradient(135deg, var(--gold-accent), #b89228); 
-      color: #120912; 
-      box-shadow: 0 4px 20px var(--gold-glow);
-    }
-    .btn-danger { border-color: rgba(231, 76, 60, 0.4); color: #f1948a; }
-    .btn-danger:hover { background: var(--danger); border-color: var(--danger); color: #fff; }
+    .btn:hover { background: var(--primary-rose); border-color: var(--primary-rose); color: #fff; transform: translateY(-1px); }
+    .btn-pink { background: var(--accent-pink); border-color: var(--accent-pink); color: #fff; font-weight: 600; }
+    .btn-pink:hover { background: #e05574; border-color: #e05574; }
+    .btn-gold { border-color: var(--gold-accent); color: var(--gold-accent); }
+    .btn-gold:hover { background: var(--gold-accent); color: #120912; }
 
     /* Navigation Tabs */
     .tabs {
       display: flex;
       gap: 15px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       justify-content: center;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding-bottom: 8px;
     }
     .tab-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 1.1rem;
-      padding: 12px 28px;
+      font-size: 1.05rem;
+      padding: 10px 22px;
       cursor: pointer;
       font-family: 'Cinzel', serif;
-      font-weight: 600;
       border-bottom: 2px solid transparent;
       transition: all 0.3s;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.5px;
     }
-    .tab-btn:hover { color: var(--text-main); }
     .tab-btn.active {
       color: var(--primary-rose);
       border-bottom-color: var(--primary-rose);
-      text-shadow: 0 0 12px var(--primary-rose-glow);
+      font-weight: 600;
     }
 
-    /* View Sections */
     .view-section { display: none; }
-    .view-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+    .view-section.active { display: block; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Cards & Inputs */
+    /* Cards */
     .card {
       background: var(--bg-card);
       border: 1px solid var(--bg-card-border);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 30px;
+      border-radius: 18px;
+      padding: 24px;
       margin-bottom: 25px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
-    label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; display: block; }
+    /* Vibe Check Banner */
+    .vibe-banner {
+      background: linear-gradient(135deg, rgba(38, 19, 41, 0.8) 0%, rgba(28, 17, 28, 0.9) 100%);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 20px;
+      padding: 25px 30px;
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .vibe-title { font-size: 0.75rem; letter-spacing: 1.5px; color: var(--primary-rose); text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
+    .vibe-banner h2 { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: #fff; font-weight: 600; }
+    .vibe-banner p { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+
+    .vibe-options { display: flex; gap: 10px; flex-wrap: wrap; }
+    .vibe-chip {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--bg-card-border);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-main);
+      transition: all 0.3s;
+    }
+    .vibe-chip:hover, .vibe-chip.selected {
+      background: rgba(232, 131, 153, 0.2);
+      border-color: var(--primary-rose);
+      color: #fff;
+    }
+
+    /* 2-Column Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 25px;
+    }
+    @media(max-width: 820px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+    /* Inputs */
     input, textarea, select {
       width: 100%;
-      background: rgba(18, 9, 18, 0.7);
+      background: rgba(10, 6, 12, 0.6);
       border: 1px solid var(--bg-card-border);
       border-radius: 12px;
-      padding: 14px 18px;
+      padding: 14px;
       color: var(--text-main);
-      margin-top: 4px;
-      margin-bottom: 18px;
+      margin-top: 8px;
+      margin-bottom: 16px;
       outline: none;
       font-size: 0.95rem;
-      transition: border-color 0.3s, box-shadow 0.3s;
     }
-    input:focus, textarea:focus, select:focus { 
-      border-color: var(--primary-rose); 
-      box-shadow: 0 0 12px var(--primary-rose-glow);
+    input:focus, textarea:focus, select:focus { border-color: var(--primary-rose); }
+
+    /* Memory Box */
+    .memory-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+    .memory-card {
+      background: #3b1154;
+      border-radius: 14px;
+      padding: 16px;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.15rem;
+      line-height: 1.4;
+      color: #f3e5f5;
+      min-height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
-    /* Journal Grid & Cards */
-    .search-bar {
-      display: flex; gap: 12px; margin-bottom: 20px;
+    /* Daily Affirmation Card */
+    .affirmation-card {
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      border-radius: 20px;
+      padding: 28px;
+      color: #fff;
+      position: relative;
     }
-    .search-bar input { margin-bottom: 0; }
+    .affirmation-card .tag { font-size: 0.75rem; letter-spacing: 1px; font-weight: 700; opacity: 0.9; margin-bottom: 12px; }
+    .affirmation-card blockquote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.25rem; line-height: 1.5; margin-bottom: 15px; }
+    .affirmation-card .author { font-size: 0.85rem; font-style: italic; opacity: 0.9; }
 
-    .journal-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      gap: 22px;
-    }
-    .journal-item {
-      background: linear-gradient(145deg, rgba(38, 20, 36, 0.8), rgba(24, 12, 24, 0.9));
+    /* Journal Feed */
+    .journal-feed { margin-top: 30px; }
+    .journal-entry-card {
+      background: var(--bg-card);
       border: 1px solid var(--bg-card-border);
       border-radius: 16px;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-    }
-    .journal-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 25px rgba(232, 131, 153, 0.18);
-      border-color: var(--primary-rose);
-    }
-    .journal-item.selected-for-letter {
-      border-color: var(--gold-accent);
-      box-shadow: 0 0 15px var(--gold-glow);
-    }
-    .journal-item h4 { 
-      color: var(--primary-rose); 
-      margin-bottom: 8px; 
-      font-family: 'Cinzel', serif;
-      font-size: 1.15rem;
-    }
-    .journal-item .meta { 
-      font-size: 0.78rem; 
-      color: var(--gold-accent); 
-      margin-bottom: 12px; 
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .mood-tag {
-      background: rgba(212, 175, 55, 0.15);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 0.72rem;
-    }
-    .journal-item .body-text {
-      font-size: 0.93rem;
-      color: #e2d2dc;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-break: break-word;
-      margin-bottom: 18px;
-      flex-grow: 1;
-    }
-    .journal-item .card-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 12px;
-    }
-    .btn-icon {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      transition: color 0.2s;
-    }
-    .btn-icon:hover { color: var(--primary-rose); }
-    .btn-icon-danger:hover { color: var(--danger); }
-
-    /* FLOWER-DECORATED LOVE LETTER PARCHMENT */
-    .letter-paper-wrapper {
-      position: relative;
-      margin-top: 15px;
-    }
-    
-    .letter-paper {
-      background: #fdfbf7;
-      background-image: 
-        radial-gradient(#eedec8 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(245, 235, 218, 0.5), rgba(255, 252, 245, 0.9));
-      background-size: 24px 24px, 100% 100%;
-      color: #2b1810;
-      border-radius: 12px;
-      padding: 70px 60px 80px 60px;
-      box-shadow: 
-        0 15px 45px rgba(0,0,0,0.6),
-        inset 0 0 80px rgba(190, 145, 90, 0.2),
-        0 0 0 1px #e3d3bd;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Embedded Botanical SVG Flowers on Love Letter */
-    .corner-flower {
-      position: absolute;
-      width: 140px;
-      height: 140px;
-      pointer-events: none;
-      z-index: 2;
-      opacity: 0.85;
-    }
-    .corner-tl { top: -10px; left: -10px; }
-    .corner-tr { top: -10px; right: -10px; transform: scaleX(-1); }
-    .corner-bl { bottom: -10px; left: -10px; transform: scaleY(-1); }
-    .corner-br { bottom: -10px; right: -10px; transform: scale(-1); }
-
-    .flower-border-top {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 220px;
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .letter-header { 
-      display: flex; 
-      justify-content: space-between; 
-      margin-bottom: 40px; 
-      font-family: 'Cinzel', serif;
-      border-bottom: 1.5px solid rgba(160, 110, 70, 0.25);
-      padding-bottom: 16px;
-      font-weight: 700;
-      color: #5c3525;
-      position: relative;
-      z-index: 3;
-    }
-    .letter-body { 
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.75rem; 
-      line-height: 2; 
-      white-space: pre-wrap; 
-      margin-bottom: 60px; 
-      color: #2a150c;
-      min-height: 160px;
-      position: relative;
-      z-index: 3;
-    }
-    
-    /* Font variations for Love Letter */
-    .font-dancing { font-family: 'Dancing Script', cursive; font-size: 1.75rem; }
-    .font-greatvibes { font-family: 'Great Vibes', cursive; font-size: 2.1rem; line-height: 1.8; }
-    .font-playfair { font-family: 'Playfair Display', serif; font-size: 1.35rem; line-height: 1.9; font-style: italic; }
-
-    .letter-footer { 
-      text-align: right; 
-      position: relative;
-      z-index: 3;
-    }
-    .letter-footer-valediction {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.6rem;
-      color: #4a281c;
-    }
-    .letter-footer-name {
-      font-family: 'Cinzel', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #3b1c10;
-      margin-top: 4px;
-      letter-spacing: 1px;
-    }
-
-    /* 3D Wax Seal with Crest */
-    .wax-seal-wrapper {
-      position: absolute;
-      bottom: 40px;
-      left: 65px;
-      z-index: 4;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .wax-seal {
-      width: 72px;
-      height: 72px;
-      background: radial-gradient(circle at 35% 35%, #bf193c 0%, #850b23 60%, #4a0412 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #dfb15b;
-      font-family: 'Cinzel', serif;
-      font-size: 1.5rem;
-      box-shadow: 
-        0 8px 20px rgba(0,0,0,0.5),
-        inset 0 2px 5px rgba(255,255,255,0.4),
-        inset 0 -3px 8px rgba(0,0,0,0.6);
-      border: 3px solid #850b23;
-      user-select: none;
-      position: relative;
-    }
-    .wax-seal::after {
-      content: '';
-      position: absolute;
-      inset: 4px;
-      border: 1px dashed rgba(223, 177, 91, 0.4);
-      border-radius: 50%;
-    }
-
-    /* Lock Screen Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(12, 6, 12, 0.94);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       padding: 20px;
+      margin-bottom: 15px;
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .journal-entry-card:hover { transform: translateY(-2px); border-color: var(--primary-rose); }
+    .entry-checkbox { position: absolute; top: 20px; right: 20px; accent-color: var(--primary-rose); width: 18px; height: 18px; cursor: pointer; }
+    .entry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-right: 30px; }
+    .entry-badge {
+      background: rgba(232, 131, 153, 0.15);
+      color: var(--primary-rose);
+      border: 1px solid rgba(232, 131, 153, 0.3);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .entry-date { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 10px; }
+    .entry-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: #fff; margin-bottom: 10px; }
+    .entry-body { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* Flower-Decorated Love Letter Studio */
+    .letter-paper {
+      background: linear-gradient(135deg, #fffbf2 0%, #f7eedd 100%);
+      color: #2c1d1d;
+      border-radius: 12px;
+      padding: 50px 60px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.6), inset 0 0 60px rgba(180, 140, 90, 0.15);
+      position: relative;
+      border: 2px solid #dfcca8;
+      font-family: 'Dancing Script', cursive;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    .corner-floral { position: absolute; width: 110px; height: 110px; opacity: 0.75; pointer-events: none; }
+    .corner-tl { top: 10px; left: 10px; }
+    .corner-tr { top: 10px; right: 10px; transform: scaleX(-1); }
+    .corner-bl { bottom: 10px; left: 10px; transform: scaleY(-1); }
+    .corner-br { bottom: 10px; right: 10px; transform: scale(-1, -1); }
+
+    .letter-header { display: flex; justify-content: space-between; margin-bottom: 35px; font-family: 'Cinzel', serif; font-size: 1.1rem; border-bottom: 1px solid #d4c29c; padding-bottom: 15px; }
+    .letter-body { font-size: 1.5rem; line-height: 1.9; white-space: pre-wrap; margin-bottom: 40px; min-height: 180px; }
+    .letter-footer { text-align: right; font-size: 1.6rem; font-family: 'Cinzel', serif; }
+
+    .wax-seal {
+      width: 65px; height: 65px;
+      background: radial-gradient(circle, #b11130 0%, #70061c 100%);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: var(--gold-accent); font-family: 'Cinzel', serif; font-size: 1.5rem;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.3);
+      position: absolute; bottom: 35px; left: 50px;
+      border: 2px dashed rgba(223, 193, 88, 0.4);
+    }
+
+    /* Saved Letters Feed */
+    .saved-letters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .saved-letter-item {
+      background: rgba(38, 19, 41, 0.7);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .saved-letter-item h4 { font-family: 'Cinzel', serif; color: var(--primary-rose); margin-bottom: 6px; }
+
+    /* Lock Screen Modal Overlay */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10, 6, 12, 0.95); backdrop-filter: blur(25px);
+      z-index: 100; display: flex; align-items: center; justify-content: center;
     }
     .lock-box {
-      background: linear-gradient(160deg, rgba(38, 20, 36, 0.9), rgba(18, 9, 18, 0.95));
-      border: 1px solid var(--bg-card-border);
-      padding: 42px 32px;
-      border-radius: 28px;
-      text-align: center;
-      max-width: 360px;
-      width: 100%;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 35px var(--shadow-rose);
-      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: var(--bg-card); border: 1px solid var(--bg-card-border);
+      padding: 40px; border-radius: 24px; text-align: center;
+      max-width: 360px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.7);
     }
-    .lock-box.shake {
-      animation: shake 0.4s ease-in-out;
-    }
-
-    @keyframes popIn {
-      from { transform: scale(0.85); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-10px); }
-      40%, 80% { transform: translateX(10px); }
-    }
-
     .pin-display {
-      letter-spacing: 16px;
-      font-size: 2.3rem;
-      margin: 18px 0 24px 0;
-      color: var(--primary-rose);
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-shadow: 0 0 12px var(--primary-rose-glow);
+      letter-spacing: 16px; font-size: 2.2rem; margin: 25px 0;
+      color: var(--primary-rose); height: 45px;
     }
     .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
     .key-btn {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--bg-card-border);
-      color: var(--text-main);
-      width: 62px;
-      height: 62px;
-      margin: 0 auto;
-      border-radius: 50%;
-      font-size: 1.3rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--bg-card-border);
+      color: var(--text-main); padding: 18px; border-radius: 50%;
+      font-size: 1.25rem; cursor: pointer; transition: all 0.2s;
     }
-    .key-btn:hover { 
-      background: var(--primary-rose); 
-      border-color: var(--primary-rose);
-      color: #fff;
-      box-shadow: 0 0 15px var(--primary-rose-glow);
-    }
-    .key-btn:active { transform: scale(0.92); }
+    .key-btn:hover { background: var(--primary-rose); border-color: var(--primary-rose); transform: scale(1.05); }
 
-    /* Toast Notification */
-    .toast-message {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      background: linear-gradient(135deg, rgba(42, 18, 32, 0.95), rgba(20, 10, 20, 0.95));
-      border: 1px solid var(--primary-rose);
-      color: var(--text-main);
-      padding: 14px 26px;
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 0.92rem;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--primary-rose); color: #fff; padding: 12px 25px; border-radius: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4); font-size: 0.9rem; transition: transform 0.3s ease;
+      z-index: 1000;
     }
-    .toast-message.show { transform: translateY(0); opacity: 1; }
-
-    /* Selection Checkboxes for Letter Generator */
-    .entry-checkbox {
-      accent-color: var(--primary-rose);
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      margin: 0;
-    }
-
-    /* Print Styles */
-    @media print {
-      body * { visibility: hidden; }
-      .letter-paper-wrapper, .letter-paper-wrapper * { visibility: visible; }
-      .letter-paper-wrapper {
-        position: absolute; left: 0; top: 0; width: 100%;
-      }
-      .letter-paper { box-shadow: none; border: 1px solid #ccc; }
-    }
-
-    @media (max-width: 650px) {
-      .container { padding: 15px; }
-      .brand h1 { font-size: 1.5rem; }
-      .letter-paper { padding: 45px 25px 60px 25px; }
-      .wax-seal-wrapper { bottom: 20px; left: 25px; }
-      .wax-seal { width: 55px; height: 55px; font-size: 1.2rem; }
-      .corner-flower { width: 90px; height: 90px; }
-    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
 
-  <!-- Ambient Floating Petals -->
-  <div id="petalContainer"></div>
+  <!-- Floating Petals Container -->
+  <div id="petalsContainer"></div>
 
-  <!-- Ambient Side Floral Frames -->
-  <div class="floral-side floral-left">
-    <svg class="floral-svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4Z"/></svg>
-    <svg class="floral-svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/></svg>
-  </div>
-  <div class="floral-side floral-right">
-    <svg class="floral-svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/></svg>
-    <svg class="floral-svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 12,2Z"/></svg>
-  </div>
-
-  <!-- Lock Screen Modal -->
+  <!-- PIN Lock Screen Modal (PIN: 3102) -->
   <div class="modal-overlay" id="lockModal">
-    <div class="lock-box" id="lockBox">
-      <div style="font-size: 2.2rem; margin-bottom: 8px;">🌹</div>
-      <h2 style="font-family:'Cinzel', serif; color: var(--primary-rose); font-size: 1.5rem;">Sanctuary Lock</h2>
-      <p style="font-size: 0.82rem; color: var(--text-muted); margin-top:4px;">Enter PIN to Access (Default: 1234)</p>
+    <div class="lock-box">
+      <h2 style="font-family:'Cinzel', serif; color: var(--primary-rose);">Sanctuary Lock</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:5px;">Enter PIN Code (Default: 3102)</p>
       <div class="pin-display" id="pinDisplay">••••</div>
       <div class="keypad">
         <button class="key-btn" onclick="pressKey('1')">1</button>
@@ -596,270 +350,202 @@
         <button class="key-btn" onclick="pressKey('7')">7</button>
         <button class="key-btn" onclick="pressKey('8')">8</button>
         <button class="key-btn" onclick="pressKey('9')">9</button>
-        <button class="key-btn" onclick="clearPin()" style="font-size: 0.85rem; color: var(--text-muted);">CLR</button>
+        <button class="key-btn" onclick="clearPin()">C</button>
         <button class="key-btn" onclick="pressKey('0')">0</button>
-        <button class="key-btn" onclick="checkPin()" style="color: var(--gold-accent);">✓</button>
+        <button class="key-btn" onclick="checkPin()">✓</button>
       </div>
     </div>
-  </div>
-
-  <!-- Custom Toast Notification -->
-  <div class="toast-message" id="toast">
-    <span id="toastIcon">✨</span>
-    <span id="toastText">Action completed</span>
   </div>
 
   <div class="container">
     <header>
       <div class="brand">
-        <div class="brand-icon">🌹</div>
-        <div>
-          <h1>Dearest Thoughts</h1>
-          <p>A private romantic sanctuary for your heart</p>
-        </div>
+        <h1>Dearest Thoughts</h1>
+        <p>A private sanctuary for your heart</p>
       </div>
       <div class="header-actions">
-        <button class="btn" onclick="lockSanctuary()">🔒 Lock App</button>
+        <button class="btn" onclick="lockSanctuary()">🔒 Lock Sanctuary</button>
       </div>
     </header>
 
+    <!-- Navigation Tabs -->
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('journalTab', this)">Journal Entries</button>
+      <button class="tab-btn active" onclick="switchTab('journalTab', this)">Journal Studio</button>
       <button class="tab-btn" onclick="switchTab('letterTab', this)">Love Letter Studio</button>
     </div>
 
-    <!-- JOURNAL SECTION -->
+    <!-- Journal Studio View -->
     <div id="journalTab" class="view-section active">
-      <div class="card">
-        <h3 id="formHeading" style="font-family: 'Cinzel', serif; margin-bottom: 18px; color: var(--primary-rose); font-size: 1.3rem; display: flex; align-items: center; gap: 8px;">
-          <span>✍️</span> Compose New Thought
-        </h3>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-          <div>
-            <label for="thoughtTitle">Title</label>
-            <input type="text" id="thoughtTitle" placeholder="e.g. Under the starlit sky..." maxlength="70">
-          </div>
-          <div>
-            <label for="thoughtMood">Mood / Sentiment</label>
-            <select id="thoughtMood">
-              <option value="Heartfelt 💖">Heartfelt 💖</option>
-              <option value="Passionate 🔥">Passionate 🔥</option>
-              <option value="Dreamy 🌙">Dreamy 🌙</option>
-              <option value="Tender 🌸">Tender 🌸</option>
-              <option value="Eternal ⏳">Eternal ⏳</option>
-            </select>
-          </div>
+      
+      <!-- Vibe Check Banner -->
+      <div class="vibe-banner">
+        <div>
+          <div class="vibe-title">Today's Vibe Check</div>
+          <h2>How is your heart feeling right now?</h2>
+          <p>Select a mood to tune into your personal sanctuary space.</p>
         </div>
-
-        <label for="thoughtBody">Your Note</label>
-        <textarea id="thoughtBody" rows="4" placeholder="Pour your feelings out here..."></textarea>
-        
-        <div style="display: flex; gap: 12px; justify-content: flex-end;">
-          <button class="btn btn-danger" id="cancelEditBtn" onclick="resetForm()" style="display: none;">Cancel Edit</button>
-          <button class="btn btn-gold" id="saveBtn" onclick="saveThought()">Save Thought</button>
+        <div class="vibe-options">
+          <div class="vibe-chip selected" onclick="selectVibe(this, '🥰 Loved')"><span>🥰</span> Loved</div>
+          <div class="vibe-chip" onclick="selectVibe(this, '✨ Happy')"><span>✨</span> Happy</div>
+          <div class="vibe-chip" onclick="selectVibe(this, '🌙 Nostalgic')"><span>🌙</span> Nostalgic</div>
+          <div class="vibe-chip" onclick="selectVibe(this, '💭 Thoughtful')"><span>💭</span> Thoughtful</div>
+          <div class="vibe-chip" onclick="selectVibe(this, '🌿 Peaceful')"><span>🌿</span> Peaceful</div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="🔍 Search thoughts..." oninput="renderThoughts()">
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h3 style="font-family: 'Cinzel', serif; font-size: 1.2rem;">Saved Entries</h3>
-          <span id="entryCount" style="font-size: 0.82rem; color: var(--gold-accent);">0 Entries</span>
-        </div>
-        <div class="journal-grid" id="journalGrid"></div>
-      </div>
-    </div>
-
-    <!-- LOVE LETTER SECTION -->
-    <div id="letterTab" class="view-section">
-      <div class="card">
-        <h3 style="font-family: 'Cinzel', serif; margin-bottom: 18px; color: var(--primary-rose); font-size: 1.3rem;">Love Letter Studio</h3>
+      <!-- 2-Column Dashboard Grid -->
+      <div class="dashboard-grid">
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
-          <div>
-            <label for="letterTo">Recipient (To)</label>
-            <input type="text" id="letterTo" placeholder="My Beloved" oninput="updateLetterPreview()">
+        <!-- Left: Write Thought Form -->
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h3 style="font-family:'Playfair Display', serif; color:#fff; font-size:1.3rem;">📌 Write a New Thought</h3>
+            <span style="font-size:0.8rem; color:var(--text-muted);" id="currentDateDisplay">Thu, Nov 5, 2026</span>
           </div>
-          <div>
-            <label for="letterFrom">Sender (From)</label>
-            <input type="text" id="letterFrom" placeholder="Forever Yours" oninput="updateLetterPreview()">
-          </div>
-          <div>
-            <label for="letterDate">Date</label>
-            <input type="text" id="letterDate" oninput="updateLetterPreview()">
-          </div>
-          <div>
-            <label for="fontSelect">Handwritten Style</label>
-            <select id="fontSelect" onchange="changeLetterFont(this.value)">
-              <option value="font-dancing">Dancing Script (Classic)</option>
-              <option value="font-greatvibes">Great Vibes (Romantic)</option>
-              <option value="font-playfair">Playfair Display (Elegant)</option>
-            </select>
+
+          <input type="text" id="thoughtTitle" placeholder="Give this thought a title...">
+          
+          <label style="font-size:0.85rem; color:var(--text-muted); display:block; margin-top:5px;">Tag Mood:</label>
+          <select id="thoughtMood">
+            <option value="🥰 Loved">🥰 Loved</option>
+            <option value="✨ Happy">✨ Happy</option>
+            <option value="🌙 Nostalgic">🌙 Nostalgic</option>
+            <option value="💭 Thoughtful">💭 Thoughtful</option>
+            <option value="🌿 Peaceful">🌿 Peaceful</option>
+          </select>
+
+          <textarea id="thoughtBody" rows="5" placeholder="Pour your heart out here... What are you feeling, thinking, or dreaming about today?"></textarea>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+            <button class="btn" onclick="addHeartIcon()">❤️ Add Heart</button>
+            <button class="btn btn-pink" onclick="saveThought()">Save Entry 🔖</button>
           </div>
         </div>
 
-        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 5px;">
-          <button class="btn btn-gold" onclick="compileSelectedThoughts()">🌹 Compile Selected Thoughts</button>
-          <button class="btn" onclick="printLetter()">🖨️ Print / Save Letter</button>
-        </div>
-      </div>
-
-      <!-- Flower-Decorated Parchment Paper -->
-      <div class="letter-paper-wrapper">
-        <div class="letter-paper" id="letterPaper">
-          
-          <!-- Top Border Flower Garland -->
-          <svg class="flower-border-top" viewBox="0 0 300 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 20 C 80 5, 220 5, 290 20" stroke="#a26c48" stroke-width="1.5" stroke-dasharray="4 2"/>
-            <circle cx="150" cy="12" r="5" fill="#e88399"/>
-            <circle cx="135" cy="15" r="3.5" fill="#dfb15b"/>
-            <circle cx="165" cy="15" r="3.5" fill="#dfb15b"/>
-            <path d="M140 15 Q 130 5 120 16 Q 135 22 140 15 Z" fill="#7a9a60" opacity="0.8"/>
-            <path d="M160 15 Q 170 5 180 16 Q 165 22 160 15 Z" fill="#7a9a60" opacity="0.8"/>
-          </svg>
-
-          <!-- SVG Corner Flower Illustrations -->
-          <svg class="corner-flower corner-tl" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <g opacity="0.85">
-              <!-- Stem & Leaves -->
-              <path d="M10 10 Q 50 20 80 80" stroke="#5d7a44" stroke-width="2.5" fill="none"/>
-              <path d="M25 22 Q 40 10 50 25 Q 35 35 25 22 Z" fill="#6b8e4e"/>
-              <path d="M45 42 Q 65 30 70 48 Q 55 58 45 42 Z" fill="#6b8e4e"/>
-              <!-- Blooming Rose 1 -->
-              <circle cx="25" cy="22" r="9" fill="#d95d77"/>
-              <circle cx="23" cy="20" r="6" fill="#ee8fa3"/>
-              <circle cx="25" cy="22" r="3" fill="#800e28"/>
-              <!-- Blooming Rose 2 -->
-              <circle cx="55" cy="55" r="12" fill="#c94b66"/>
-              <circle cx="52" cy="52" r="8" fill="#e88399"/>
-              <circle cx="55" cy="55" r="4" fill="#68091e"/>
-              <!-- Small Buds -->
-              <circle cx="75" cy="75" r="5" fill="#dfb15b"/>
-            </g>
-          </svg>
-
-          <svg class="corner-flower corner-tr" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <g opacity="0.85">
-              <path d="M10 10 Q 50 20 80 80" stroke="#5d7a44" stroke-width="2.5" fill="none"/>
-              <path d="M25 22 Q 40 10 50 25 Q 35 35 25 22 Z" fill="#6b8e4e"/>
-              <path d="M45 42 Q 65 30 70 48 Q 55 58 45 42 Z" fill="#6b8e4e"/>
-              <circle cx="25" cy="22" r="9" fill="#d95d77"/>
-              <circle cx="23" cy="20" r="6" fill="#ee8fa3"/>
-              <circle cx="55" cy="55" r="12" fill="#c94b66"/>
-              <circle cx="52" cy="52" r="8" fill="#e88399"/>
-              <circle cx="75" cy="75" r="5" fill="#dfb15b"/>
-            </g>
-          </svg>
-
-          <svg class="corner-flower corner-bl" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <g opacity="0.85">
-              <path d="M10 10 Q 50 20 80 80" stroke="#5d7a44" stroke-width="2.5" fill="none"/>
-              <path d="M25 22 Q 40 10 50 25 Q 35 35 25 22 Z" fill="#6b8e4e"/>
-              <circle cx="55" cy="55" r="12" fill="#c94b66"/>
-              <circle cx="52" cy="52" r="8" fill="#e88399"/>
-              <circle cx="75" cy="75" r="5" fill="#dfb15b"/>
-            </g>
-          </svg>
-
-          <svg class="corner-flower corner-br" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <g opacity="0.85">
-              <path d="M10 10 Q 50 20 80 80" stroke="#5d7a44" stroke-width="2.5" fill="none"/>
-              <path d="M25 22 Q 40 10 50 25 Q 35 35 25 22 Z" fill="#6b8e4e"/>
-              <circle cx="55" cy="55" r="12" fill="#c94b66"/>
-              <circle cx="52" cy="52" r="8" fill="#e88399"/>
-              <circle cx="75" cy="75" r="5" fill="#dfb15b"/>
-            </g>
-          </svg>
-
-          <!-- Letter Content -->
-          <div class="letter-header">
-            <span id="dispTo">To: My Dearest</span>
-            <span id="dispDate">Nov 5, 2026</span>
-          </div>
-          
-          <div class="letter-body font-dancing" id="dispBody">Select thoughts from your journal entries to weave together your personalized love letter...</div>
-          
-          <div class="letter-footer">
-            <div class="letter-footer-valediction">With all my love & devotion,</div>
-            <div class="letter-footer-name" id="dispFromSignature">Forever Yours</div>
+        <!-- Right: Memory Box & Affirmation -->
+        <div>
+          <!-- Little Memory Box -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="font-family:'Playfair Display', serif; color:#fff; font-size:1.2rem;">🍧 Little Memory Box</h3>
+              <button class="btn" style="padding:4px 10px; font-size:0.75rem;" onclick="addPinNote()">+ Pin Note</button>
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">Quick sweet memories, favorite quotes, or cute reminders.</p>
+            
+            <div class="memory-grid" id="memoryGrid">
+              <div class="memory-card">Late-night talks and simple moments—with her, even doing nothing feels special.</div>
+              <div class="memory-card">he called me with cutiest name puntureeee💙</div>
+            </div>
           </div>
 
-          <!-- 3D Red Wax Seal with Crest -->
-          <div class="wax-seal-wrapper">
-            <div class="wax-seal">
-              <span>❦</span>
+          <!-- Daily Love Affirmation Card -->
+          <div class="affirmation-card">
+            <div class="tag">DAILY LOVE AFFIRMATION</div>
+            <blockquote id="quoteText">"In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."</blockquote>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="author" id="quoteAuthor">— Maya Angelou</span>
+              <button class="btn" style="background:rgba(255,255,255,0.2); border:none; color:#fff; padding:6px 14px; font-size:0.8rem;" onclick="nextQuote()">🔄 Refresh</button>
             </div>
           </div>
         </div>
+
+      </div>
+
+      <!-- Journal Archives -->
+      <div class="journal-feed">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+          <h3 style="font-family:'Playfair Display', serif; font-size:1.4rem; color:#fff;">📖 Journal Archives</h3>
+          <span class="entry-badge" id="entryCountBadge">0 entries</span>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Tip: Check the boxes on entries you want to compile into your love letter.</p>
+        <div id="journalGrid"></div>
+      </div>
+
+    </div>
+
+    <!-- Love Letter Studio View -->
+    <div id="letterTab" class="view-section">
+      <div class="card">
+        <h3 style="font-family: 'Cinzel', serif; margin-bottom: 20px; color: var(--primary-rose);">Love Letter Customizer</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <input type="text" id="letterTo" placeholder="To (e.g. My Dearest Love)" oninput="updateLetterPreview()">
+          <input type="text" id="letterFrom" placeholder="From (e.g. Forever Yours)" oninput="updateLetterPreview()">
+        </div>
+        <div style="margin-top: 10px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+          <label style="font-size:0.85rem; color:var(--text-muted);">Font Style:</label>
+          <select id="letterFont" style="width: auto; margin:0;" onchange="changeLetterFont()">
+            <option value="'Dancing Script', cursive">Dancing Script</option>
+            <option value="'Great Vibes', cursive">Great Vibes</option>
+            <option value="'Playfair Display', serif">Playfair Display</option>
+          </select>
+          <button class="btn btn-pink" style="margin-left:auto;" onclick="compileSelectedThoughts()">Compile Selected Thoughts into Letter</button>
+          <button class="btn btn-gold" onclick="saveLetterWithDate()">Save Letter with Date 💌</button>
+        </div>
+      </div>
+
+      <!-- Flower-Decorated Parchment Love Letter Paper -->
+      <div class="letter-paper" id="letterPaper">
+        <!-- SVG Corner Floral Decorations -->
+        <svg class="corner-floral corner-tl" viewBox="0 0 100 100"><path fill="#8a233c" d="M10,10 Q40,10 50,40 Q20,30 10,10 Z"/><path fill="#c8526d" d="M20,20 Q60,15 70,50 Q35,40 20,20 Z"/><circle cx="25" cy="25" r="8" fill="#dfb15b"/></svg>
+        <svg class="corner-floral corner-tr" viewBox="0 0 100 100"><path fill="#8a233c" d="M10,10 Q40,10 50,40 Q20,30 10,10 Z"/><path fill="#c8526d" d="M20,20 Q60,15 70,50 Q35,40 20,20 Z"/><circle cx="25" cy="25" r="8" fill="#dfb15b"/></svg>
+        <svg class="corner-floral corner-bl" viewBox="0 0 100 100"><path fill="#8a233c" d="M10,10 Q40,10 50,40 Q20,30 10,10 Z"/><path fill="#c8526d" d="M20,20 Q60,15 70,50 Q35,40 20,20 Z"/><circle cx="25" cy="25" r="8" fill="#dfb15b"/></svg>
+        <svg class="corner-floral corner-br" viewBox="0 0 100 100"><path fill="#8a233c" d="M10,10 Q40,10 50,40 Q20,30 10,10 Z"/><path fill="#c8526d" d="M20,20 Q60,15 70,50 Q35,40 20,20 Z"/><circle cx="25" cy="25" r="8" fill="#dfb15b"/></svg>
+
+        <div class="letter-header">
+          <span id="dispTo">To: My Dearest</span>
+          <span id="dispDate">Nov 5, 2026</span>
+        </div>
+
+        <div class="letter-body" id="dispBody">Select thoughts from your Journal Studio (or leave all unchecked) and click 'Compile Selected Thoughts' to generate your love letter here...</div>
+
+        <div class="letter-footer" id="dispFrom">
+          With all my love,<br>Forever Yours
+        </div>
+
+        <div class="wax-seal">❦</div>
+      </div>
+
+      <!-- Saved Letters Feed -->
+      <div class="card" style="margin-top: 30px;">
+        <h3 style="font-family: 'Cinzel', serif; color: var(--primary-rose);">Saved Love Letters Archive</h3>
+        <div class="saved-letters-grid" id="savedLettersGrid"></div>
       </div>
     </div>
   </div>
 
+  <div class="toast" id="toast">Notification</div>
+
   <script>
-    // App State
-    let currentPin = "1234";
+    let currentPin = "3102";
     let enteredPin = "";
-    let editingId = null;
-    let selectedThoughtIds = new Set();
-    let thoughts = JSON.parse(localStorage.getItem('dearest_thoughts_v2') || '[]');
+    let activeVibe = "🥰 Loved";
 
-    // Default Seed Data if empty
-    if (thoughts.length === 0) {
-      thoughts = [
-        {
-          id: 101,
-          title: "Moonlight Reflections",
-          mood: "Dreamy 🌙",
-          body: "Whenever I gaze up at the night sky, every twinkling star reminds me of the light you bring into my life.",
-          date: "Nov 5, 2026"
-        },
-        {
-          id: 102,
-          title: "Forever & Always",
-          mood: "Eternal ⏳",
-          body: "In a world full of constant change, my feelings for you remain steady, warm, and everlasting.",
-          date: "Nov 5, 2026"
-        }
-      ];
-      localStorage.setItem('dearest_thoughts_v2', JSON.stringify(thoughts));
-    }
+    let thoughts = JSON.parse(localStorage.getItem('dearest_thoughts') || '[]');
+    let savedLetters = JSON.parse(localStorage.getItem('dearest_saved_letters') || '[]');
 
-    // Set Default Letter Date
-    const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    document.getElementById('letterDate').value = todayStr;
-    document.getElementById('dispDate').innerText = todayStr;
+    const affirmations = [
+      { quote: '"In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."', author: '— Maya Angelou' },
+      { quote: '"Whatever our souls are made of, his and mine are the same."', author: '— Emily Brontë' },
+      { quote: '"If I had a flower for every time I thought of you... I could walk through my garden forever."', author: '— Alfred Tennyson' },
+      { quote: '"I love you not only for what you are, but for what I am when I am with you."', author: '— Roy Croft' }
+    ];
+    let quoteIndex = 0;
 
-    // Toast Notification System
-    function showToast(msg, icon = '✨') {
-      const toast = document.getElementById('toast');
-      document.getElementById('toastText').innerText = msg;
-      document.getElementById('toastIcon').innerText = icon;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3200);
-    }
-
-    // Dynamic Swaying Petals
     function createPetals() {
-      const container = document.getElementById('petalContainer');
-      container.innerHTML = '';
-      for(let i = 0; i < 20; i++) {
+      const container = document.getElementById('petalsContainer');
+      for(let i=0; i<15; i++) {
         let petal = document.createElement('div');
         petal.className = 'petal';
         petal.style.left = Math.random() * 100 + 'vw';
-        let size = Math.random() * 12 + 10;
-        petal.style.width = size + 'px';
-        petal.style.height = (size * 1.3) + 'px';
-        petal.style.animationDuration = (Math.random() * 6 + 7) + 's';
+        petal.style.width = (Math.random() * 10 + 8) + 'px';
+        petal.style.height = (Math.random() * 10 + 8) + 'px';
+        petal.style.animationDuration = (Math.random() * 5 + 6) + 's';
         petal.style.animationDelay = (Math.random() * 5) + 's';
         container.appendChild(petal);
       }
     }
     createPetals();
 
-    // Lock System
     function pressKey(num) {
       if(enteredPin.length < 4) {
         enteredPin += num;
@@ -868,214 +554,195 @@
     }
     function clearPin() { enteredPin = ""; updatePinDisplay(); }
     function updatePinDisplay() {
-      document.getElementById('pinDisplay').innerText = enteredPin.length === 0 ? '••••' : '•'.repeat(enteredPin.length);
+      document.getElementById('pinDisplay').innerText = '•'.repeat(enteredPin.length) || '••••';
     }
-
     function checkPin() {
       if(enteredPin === currentPin) {
         document.getElementById('lockModal').style.display = 'none';
         enteredPin = "";
         updatePinDisplay();
-        showToast("Sanctuary Unlocked", "🔓");
+        showToast("Welcome back to your Sanctuary ❤️");
       } else {
-        const box = document.getElementById('lockBox');
-        box.classList.add('shake');
-        setTimeout(() => box.classList.remove('shake'), 400);
-        showToast("Incorrect PIN Code", "❌");
+        showToast("Incorrect PIN Code!");
         clearPin();
       }
     }
-
     function lockSanctuary() {
-      enteredPin = "";
-      updatePinDisplay();
       document.getElementById('lockModal').style.display = 'flex';
-      showToast("Sanctuary Locked", "🔒");
     }
 
-    // Tabs
     function switchTab(tabId, btn) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
       btn.classList.add('active');
-
-      if(tabId === 'letterTab') {
-        updateLetterPreview();
-      }
     }
 
-    // Save or Edit Journal Thought
+    function selectVibe(el, mood) {
+      document.querySelectorAll('.vibe-chip').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      activeVibe = mood;
+      document.getElementById('thoughtMood').value = mood;
+    }
+
+    function addHeartIcon() {
+      const body = document.getElementById('thoughtBody');
+      body.value += ' 💕';
+    }
+
     function saveThought() {
-      const title = document.getElementById('thoughtTitle').value.trim();
+      const title = document.getElementById('thoughtTitle').value;
+      const body = document.getElementById('thoughtBody').value;
       const mood = document.getElementById('thoughtMood').value;
-      const body = document.getElementById('thoughtBody').value.trim();
+      
+      if(!title || !body) return showToast('Please enter both title and body');
 
-      if(!title || !body) {
-        showToast('Please enter both title and body', '⚠️');
-        return;
-      }
+      const entry = {
+        id: Date.now(),
+        title,
+        body,
+        mood,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+      };
 
-      if (editingId) {
-        thoughts = thoughts.map(t => t.id === editingId ? { ...t, title, mood, body } : t);
-        showToast('Thought updated', '✏️');
-      } else {
-        const entry = { id: Date.now(), title, mood, body, date: todayStr };
-        thoughts.unshift(entry);
-        showToast('Thought saved to sanctuary', '💖');
-      }
+      thoughts.unshift(entry);
+      localStorage.setItem('dearest_thoughts', JSON.stringify(thoughts));
 
-      localStorage.setItem('dearest_thoughts_v2', JSON.stringify(thoughts));
-      resetForm();
-      renderThoughts();
-    }
-
-    function editThought(id) {
-      const t = thoughts.find(item => item.id === id);
-      if(!t) return;
-
-      document.getElementById('thoughtTitle').value = t.title;
-      document.getElementById('thoughtMood').value = t.mood;
-      document.getElementById('thoughtBody').value = t.body;
-      document.getElementById('formHeading').innerHTML = "<span>✏️</span> Edit Thought";
-      document.getElementById('saveBtn').innerText = "Update Thought";
-      document.getElementById('cancelEditBtn').style.display = "inline-flex";
-      editingId = id;
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function deleteThought(id) {
-      thoughts = thoughts.filter(t => t.id !== id);
-      selectedThoughtIds.delete(id);
-      localStorage.setItem('dearest_thoughts_v2', JSON.stringify(thoughts));
-      renderThoughts();
-      showToast('Entry removed', '🗑️');
-      if(editingId === id) resetForm();
-    }
-
-    function resetForm() {
       document.getElementById('thoughtTitle').value = '';
       document.getElementById('thoughtBody').value = '';
-      document.getElementById('formHeading').innerHTML = "<span>✍️</span> Compose New Thought";
-      document.getElementById('saveBtn').innerText = "Save Thought";
-      document.getElementById('cancelEditBtn').style.display = "none";
-      editingId = null;
-    }
-
-    function toggleThoughtSelection(id) {
-      if(selectedThoughtIds.has(id)) {
-        selectedThoughtIds.delete(id);
-      } else {
-        selectedThoughtIds.add(id);
-      }
       renderThoughts();
+      showToast('Saved to your Journal Archives ✨');
     }
 
     function renderThoughts() {
       const grid = document.getElementById('journalGrid');
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      
-      const filtered = thoughts.filter(t => 
-        t.title.toLowerCase().includes(query) || t.body.toLowerCase().includes(query)
-      );
+      document.getElementById('entryCountBadge').innerText = `${thoughts.length} entries`;
 
-      document.getElementById('entryCount').innerText = `${filtered.length} ${filtered.length === 1 ? 'Entry' : 'Entries'}`;
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 45px; color: var(--text-muted);">
-            <p style="font-size: 1.1rem; font-style: italic;">No thoughts match your query.</p>
-          </div>
-        `;
+      if(thoughts.length === 0) {
+        grid.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px;">Your journal is empty. Pour your heart out above!</div>`;
         return;
       }
 
-      grid.innerHTML = filtered.map(t => {
-        const isSelected = selectedThoughtIds.has(t.id);
-        return `
-          <div class="journal-item ${isSelected ? 'selected-for-letter' : ''}">
-            <div>
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
-                <h4>${escapeHtml(t.title)}</h4>
-                <input type="checkbox" class="entry-checkbox" ${isSelected ? 'checked' : ''} 
-                       onclick="toggleThoughtSelection(${t.id})" title="Include in Love Letter">
-              </div>
-              <div class="meta">
-                <span>${t.date}</span>
-                <span class="mood-tag">${t.mood}</span>
-              </div>
-              <div class="body-text">${escapeHtml(t.body)}</div>
-            </div>
-            <div class="card-actions">
-              <button class="btn-icon" onclick="copyThought('${escapeHtml(t.body)}')">📋 Copy</button>
-              <div>
-                <button class="btn-icon" onclick="editThought(${t.id})">✏️ Edit</button>
-                <button class="btn-icon btn-icon-danger" onclick="deleteThought(${t.id})">🗑️</button>
-              </div>
+      grid.innerHTML = thoughts.map(t => `
+        <div class="journal-entry-card">
+          <input type="checkbox" class="entry-checkbox" data-id="${t.id}" title="Check to include in compiled love letter">
+          <div class="entry-header">
+            <span class="entry-badge">${t.mood}</span>
+            <div class="entry-date">
+              <span>${t.date}</span>
+              <button class="btn" style="padding:2px 8px; font-size:0.7rem;" onclick="deleteThought(${t.id})">🗑️</button>
             </div>
           </div>
-        `;
-      }).join('');
+          <div class="entry-title">${t.title}</div>
+          <div class="entry-body">${t.body}</div>
+        </div>
+      `).join('');
     }
 
-    function copyThought(text) {
-      const tempInput = document.createElement('textarea');
-      tempInput.value = text;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(tempInput);
-      showToast('Copied note to clipboard', '📋');
+    function deleteThought(id) {
+      thoughts = thoughts.filter(t => t.id !== id);
+      localStorage.setItem('dearest_thoughts', JSON.stringify(thoughts));
+      renderThoughts();
+      showToast('Thought removed');
     }
 
-    // Love Letter Compiler
-    function compileSelectedThoughts() {
-      if(selectedThoughtIds.size === 0) {
-        // If none checked, compile all
-        if(thoughts.length === 0) {
-          showToast('No thoughts available to compile', '⚠️');
-          return;
-        }
-        const fullBody = thoughts.map(t => `~ ${t.title} ~\n${t.body}`).join("\n\n");
-        document.getElementById('dispBody').innerText = fullBody;
-        showToast('Compiled all saved thoughts!', '🌹');
-      } else {
-        const selectedList = thoughts.filter(t => selectedThoughtIds.has(t.id));
-        const fullBody = selectedList.map(t => `~ ${t.title} ~\n${t.body}`).join("\n\n");
-        document.getElementById('dispBody').innerText = fullBody;
-        showToast(`Compiled ${selectedList.length} selected thoughts!`, '🌹');
+    function addPinNote() {
+      const text = prompt('Enter a short note or memory for your pinboard:');
+      if(text) {
+        const grid = document.getElementById('memoryGrid');
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.innerText = text;
+        grid.appendChild(card);
       }
+    }
+
+    function nextQuote() {
+      quoteIndex = (quoteIndex + 1) % affirmations.length;
+      document.getElementById('quoteText').innerText = affirmations[quoteIndex].quote;
+      document.getElementById('quoteAuthor').innerText = affirmations[quoteIndex].author;
+    }
+
+    // Compile Selected (or All) Thoughts
+    function compileSelectedThoughts() {
+      const selectedCheckboxes = document.querySelectorAll('.entry-checkbox:checked');
+      let targetEntries = [];
+
+      if(selectedCheckboxes.length > 0) {
+        const selectedIds = Array.from(selectedCheckboxes).map(cb => Number(cb.dataset.id));
+        targetEntries = thoughts.filter(t => selectedIds.includes(t.id));
+        showToast(`Compiled ${targetEntries.length} selected thoughts into letter! ✨`);
+      } else if(thoughts.length > 0) {
+        targetEntries = thoughts;
+        showToast('Compiled all thoughts into letter! ✨');
+      } else {
+        return showToast('No journal thoughts available to compile.');
+      }
+
+      document.getElementById('dispBody').innerText = targetEntries.map(t => `${t.title}\n${t.body}`).join("\n\n");
+    }
+
+    // Save Love Letter with Current Date
+    function saveLetterWithDate() {
+      const to = document.getElementById('letterTo').value || "My Dearest";
+      const from = document.getElementById('letterFrom').value || "Forever Yours";
+      const body = document.getElementById('dispBody').innerText;
+      const date = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+      if(!body || body.includes("Select thoughts from your Journal Studio")) {
+        return showToast("Please write or compile a letter body first!");
+      }
+
+      const letterObj = { id: Date.now(), to, from, body, date };
+      savedLetters.unshift(letterObj);
+      localStorage.setItem('dearest_saved_letters', JSON.stringify(savedLetters));
+      
+      renderSavedLetters();
+      showToast(`Love Letter saved with current date (${date}) 💌`);
+    }
+
+    function renderSavedLetters() {
+      const container = document.getElementById('savedLettersGrid');
+      if(savedLetters.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); text-align: center; font-size: 0.85rem;">No saved letters yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = savedLetters.map(l => `
+        <div class="saved-letter-item">
+          <h4>To: ${l.to}</h4>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">Saved: ${l.date}</div>
+          <p style="font-size:0.85rem; color:var(--text-main); white-space:pre-wrap; max-height:80px; overflow:hidden;">${l.body}</p>
+        </div>
+      `).join('');
     }
 
     function updateLetterPreview() {
-      const toVal = document.getElementById('letterTo').value.trim() || "My Dearest";
-      const fromVal = document.getElementById('letterFrom').value.trim() || "Forever Yours";
-      const dateVal = document.getElementById('letterDate').value.trim() || todayStr;
-      
-      document.getElementById('dispTo').innerText = "To: " + toVal;
-      document.getElementById('dispFromSignature').innerText = fromVal;
-      document.getElementById('dispDate').innerText = dateVal;
-
-      const currentBody = document.getElementById('dispBody').innerText;
-      if (currentBody.startsWith("Select thoughts") && thoughts.length > 0) {
-        compileSelectedThoughts();
-      }
+      const to = document.getElementById('letterTo').value || "My Dearest";
+      const from = document.getElementById('letterFrom').value || "Forever Yours";
+      document.getElementById('dispTo').innerText = "To: " + to;
+      document.getElementById('dispFrom').innerHTML = "With all my love,<br>" + from;
     }
 
-    function changeLetterFont(fontClass) {
-      const body = document.getElementById('dispBody');
-      body.className = `letter-body ${fontClass}`;
+    function changeLetterFont() {
+      const font = document.getElementById('letterFont').value;
+      document.getElementById('letterPaper').style.fontFamily = font;
     }
 
-    function printLetter() { window.print(); }
-
-    function escapeHtml(str) {
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // Initial Render
+    // Init
+    const currentDateStr = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+    document.getElementById('currentDateDisplay').innerText = currentDateStr;
+    document.getElementById('dispDate').innerText = currentDateStr;
+
     renderThoughts();
+    renderSavedLetters();
   </script>
 </body>
 </html>
