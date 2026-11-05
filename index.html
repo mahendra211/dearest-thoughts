@@ -74,13 +74,13 @@
     }
     .brand p { font-size: 0.85rem; color: var(--text-muted); font-style: italic; font-family: 'Playfair Display', serif; }
 
-    .header-actions { display: flex; gap: 12px; }
+    .header-actions { display: flex; gap: 10px; }
 
     .btn {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--bg-card-border);
       color: var(--text-main);
-      padding: 9px 18px;
+      padding: 9px 16px;
       border-radius: 20px;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -297,7 +297,7 @@
     }
     .saved-letter-item h4 { font-family: 'Cinzel', serif; color: var(--primary-rose); margin-bottom: 6px; }
 
-    /* Lock Screen Modal Overlay */
+    /* Modals Overlay */
     .modal-overlay {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(10, 6, 12, 0.95); backdrop-filter: blur(25px);
@@ -334,11 +334,11 @@
   <!-- Floating Petals Container -->
   <div id="petalsContainer"></div>
 
-  <!-- PIN Lock Screen Modal (PIN: 3102) -->
+  <!-- PIN Lock Screen Modal (No default text exposed) -->
   <div class="modal-overlay" id="lockModal">
     <div class="lock-box">
       <h2 style="font-family:'Cinzel', serif; color: var(--primary-rose);">Sanctuary Lock</h2>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:5px;">Enter PIN Code (Default: 3102)</p>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:5px;">Enter PIN Code</p>
       <div class="pin-display" id="pinDisplay">••••</div>
       <div class="keypad">
         <button class="key-btn" onclick="pressKey('1')">1</button>
@@ -357,6 +357,19 @@
     </div>
   </div>
 
+  <!-- Change PIN Modal -->
+  <div class="modal-overlay" id="changePinModal" style="display: none;">
+    <div class="lock-box" style="max-width: 380px;">
+      <h2 style="font-family:'Cinzel', serif; color: var(--primary-rose); margin-bottom:10px;">Change Security PIN</h2>
+      <input type="password" id="oldPinInput" maxlength="4" placeholder="Enter Old 4-Digit PIN">
+      <input type="password" id="newPinInput" maxlength="4" placeholder="Enter New 4-Digit PIN">
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button class="btn" style="flex:1;" onclick="closeChangePinModal()">Cancel</button>
+        <button class="btn btn-pink" style="flex:1;" onclick="saveNewPinCode()">Update PIN</button>
+      </div>
+    </div>
+  </div>
+
   <div class="container">
     <header>
       <div class="brand">
@@ -364,6 +377,7 @@
         <p>A private sanctuary for your heart</p>
       </div>
       <div class="header-actions">
+        <button class="btn" onclick="openChangePinModal()">🔑 Change PIN</button>
         <button class="btn" onclick="lockSanctuary()">🔒 Lock Sanctuary</button>
       </div>
     </header>
@@ -451,13 +465,13 @@
 
       </div>
 
-      <!-- Journal Archives -->
+      <!-- Journal ArchivesFeed -->
       <div class="journal-feed">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
           <h3 style="font-family:'Playfair Display', serif; font-size:1.4rem; color:#fff;">📖 Journal Archives</h3>
           <span class="entry-badge" id="entryCountBadge">0 entries</span>
         </div>
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Tip: Check the boxes on entries you want to compile into your love letter.</p>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Tip: Check boxes on entries you want to compile into your love letter.</p>
         <div id="journalGrid"></div>
       </div>
 
@@ -516,7 +530,8 @@
   <div class="toast" id="toast">Notification</div>
 
   <script>
-    let currentPin = "3102";
+    // Security PIN (Default 3102, read dynamic from localStorage)
+    let currentPin = localStorage.getItem('sanctuary_pin') || "3102";
     let enteredPin = "";
     let activeVibe = "🥰 Loved";
 
@@ -569,6 +584,26 @@
     }
     function lockSanctuary() {
       document.getElementById('lockModal').style.display = 'flex';
+    }
+
+    // Change PIN Logic
+    function openChangePinModal() { document.getElementById('changePinModal').style.display = 'flex'; }
+    function closeChangePinModal() {
+      document.getElementById('oldPinInput').value = '';
+      document.getElementById('newPinInput').value = '';
+      document.getElementById('changePinModal').style.display = 'none';
+    }
+    function saveNewPinCode() {
+      const oldPin = document.getElementById('oldPinInput').value;
+      const newPin = document.getElementById('newPinInput').value;
+
+      if(oldPin !== currentPin) return showToast("Incorrect old PIN!");
+      if(newPin.length !== 4 || isNaN(newPin)) return showToast("New PIN must be 4 numbers!");
+
+      currentPin = newPin;
+      localStorage.setItem('sanctuary_pin', newPin);
+      showToast("PIN updated successfully! 🔒");
+      closeChangePinModal();
     }
 
     function switchTab(tabId, btn) {
@@ -663,7 +698,6 @@
       document.getElementById('quoteAuthor').innerText = affirmations[quoteIndex].author;
     }
 
-    // Compile Selected (or All) Thoughts
     function compileSelectedThoughts() {
       const selectedCheckboxes = document.querySelectorAll('.entry-checkbox:checked');
       let targetEntries = [];
@@ -682,7 +716,6 @@
       document.getElementById('dispBody').innerText = targetEntries.map(t => `${t.title}\n${t.body}`).join("\n\n");
     }
 
-    // Save Love Letter with Current Date
     function saveLetterWithDate() {
       const to = document.getElementById('letterTo').value || "My Dearest";
       const from = document.getElementById('letterFrom').value || "Forever Yours";
